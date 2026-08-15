@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "@clerk/ui/themes/shadcn.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -53,17 +54,21 @@
 
   @keyframes shooting-star {
     0% {
-      transform: translate3d(0, -45vh, 0);
+      transform: translate3d(0, -30vh, 0);
       opacity: 0;
     }
-    12% {
+    3% {
       opacity: 1;
     }
-    82% {
+    64% {
       opacity: 1;
+    }
+    74% {
+      transform: translate3d(0, 150vh, 0);
+      opacity: 0;
     }
     100% {
-      transform: translate3d(0, 145vh, 0);
+      transform: translate3d(0, 150vh, 0);
       opacity: 0;
     }
   }

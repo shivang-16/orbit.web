@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { ArrowUpRight, ChevronDown, Sun } from "lucide-react";
+import { ChevronDown, Sun } from "lucide-react";
+
+import { AuthControls } from "@/components/layout/auth-controls";
 
 const NAV_ITEMS = [
   { label: "Models", href: "/models", hasMenu: true },
@@ -44,15 +46,7 @@ export function SiteHeader() {
             <Sun className="size-3.5" />
           </button>
 
-          <Link
-            href="/sign-up"
-            className="group flex h-8 items-center gap-2 rounded-full bg-white pr-1 pl-3.5 text-sm font-medium text-black transition-colors hover:bg-zinc-200"
-          >
-            Start for free
-            <span className="flex size-6 items-center justify-center rounded-full bg-black text-white">
-              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />
-            </span>
-          </Link>
+          <AuthControls />
         </div>
       </div>
     </header>
