@@ -1,13 +1,18 @@
 "use client";
 
-import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
-import { ArrowUpRight } from "lucide-react";
+import { SignInButton, SignUpButton, Show } from "@clerk/nextjs";
+import { ArrowSquareOutIcon, ArrowUpRightIcon } from "@phosphor-icons/react";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+
+const afterAuth = { forceRedirectUrl: "/dashboard" };
 
 export function AuthControls() {
   return (
     <>
       <Show when="signed-out">
-        <SignInButton>
+        <SignInButton {...afterAuth}>
           <button
             type="button"
             className="hidden h-8 items-center px-2 text-sm text-zinc-400 transition-colors hover:text-white sm:flex"
@@ -15,20 +20,22 @@ export function AuthControls() {
             Sign in
           </button>
         </SignInButton>
-        <SignUpButton>
-          <button
-            type="button"
-            className="group flex h-8 items-center gap-2 rounded-full bg-white pr-1 pl-3.5 text-sm font-medium text-black transition-colors hover:bg-zinc-200"
-          >
+        <SignUpButton {...afterAuth}>
+          <Button type="button" variant="pill" className="pr-1 pl-3.5">
             Start for free
             <span className="flex size-6 items-center justify-center rounded-full bg-black text-white">
-              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />
+              <ArrowUpRightIcon size={14} weight="bold" />
             </span>
-          </button>
+          </Button>
         </SignUpButton>
       </Show>
       <Show when="signed-in">
-        <UserButton />
+        <Button asChild variant="pill" className="px-3.5">
+          <Link href="/dashboard">
+            Dashboard
+            <ArrowSquareOutIcon size={14} weight="bold" />
+          </Link>
+        </Button>
       </Show>
     </>
   );

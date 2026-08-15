@@ -1,5 +1,5 @@
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import { ChevronDown, Sun } from "lucide-react";
 
 import { AuthControls } from "@/components/layout/auth-controls";
 
@@ -31,21 +31,13 @@ export function SiteHeader() {
             >
               {item.label}
               {item.hasMenu ? (
-                <ChevronDown className="size-3 text-zinc-600" />
+                <CaretDownIcon className="text-zinc-600" size={12} weight="bold" />
               ) : null}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            aria-label="Toggle theme"
-            className="flex size-8 items-center justify-center rounded-full border border-white/10 text-zinc-400 transition-colors hover:border-white/20 hover:text-white"
-          >
-            <Sun className="size-3.5" />
-          </button>
-
           <AuthControls />
         </div>
       </div>

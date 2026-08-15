@@ -2,6 +2,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Geist_Mono, Instrument_Sans } from "next/font/google";
+
+import { SyncUser } from "@/components/auth/sync-user";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -26,7 +28,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${instrumentSans.variable} ${geistMono.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ClerkProvider appearance={{ theme: dark }}>
+        <ClerkProvider
+          appearance={{ theme: dark }}
+          signInForceRedirectUrl="/dashboard"
+          signUpForceRedirectUrl="/dashboard"
+          signInFallbackRedirectUrl="/dashboard"
+          signUpFallbackRedirectUrl="/dashboard"
+        >
+          <SyncUser />
           {children}
         </ClerkProvider>
       </body>
