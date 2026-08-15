@@ -11,6 +11,7 @@ export type CatalogueModel = {
   tags: string[];
   modalities: string[];
   is_active: boolean;
+  created_at: string;
 };
 
 export type CatalogueHighlight = {
@@ -97,6 +98,11 @@ function normalizeHighlights(
 export function fetchCatalogue(tag?: string) {
   const query = tag ? `?tag=${encodeURIComponent(tag)}` : "";
   return apiFetch(`/catalogue${query}`) as Promise<CatalogueList>;
+}
+
+export async function fetchCatalogueModel(id: string) {
+  const raw = (await apiFetch(`/catalogue/${encodeURIComponent(id)}`)) as { model: CatalogueModel };
+  return raw.model;
 }
 
 export function formatContext(limit: number) {

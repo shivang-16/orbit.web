@@ -1,11 +1,10 @@
-import { MoonStarsIcon, OpenAiLogoIcon, SparkleIcon } from "@phosphor-icons/react";
-
 import { cn } from "@/lib/utils";
 
-const VENDOR_TILE: Record<string, string> = {
-  anthropic: "bg-[#d97757]/15 text-[#e0906f]",
-  openai: "bg-white/10 text-white",
-  moonshot: "bg-[#6366f1]/15 text-indigo-300",
+const VENDOR_LOGOS: Record<string, string> = {
+  anthropic: "/vendors/anthropic.svg",
+  openai: "/vendors/openai.svg",
+  moonshot: "/vendors/moonshot.png",
+  mistral: "/vendors/mistral.png",
 };
 
 export function VendorLogo({
@@ -15,29 +14,24 @@ export function VendorLogo({
   vendor: string;
   className?: string;
 }) {
+  const src = VENDOR_LOGOS[vendor];
+  const initial = vendor.charAt(0).toUpperCase() || "?";
+
   return (
     <span
       className={cn(
-        "flex size-6 shrink-0 items-center justify-center rounded-md",
-        VENDOR_TILE[vendor] ?? "bg-white/10 text-zinc-300",
+        "flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-md",
+        vendor === "openai" ? "bg-white/10 text-white" : "bg-transparent",
         className
       )}
       aria-hidden
     >
-      <VendorGlyph vendor={vendor} />
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" className="size-full object-contain" />
+      ) : (
+        <span className="text-[11px] font-semibold uppercase text-zinc-300">{initial}</span>
+      )}
     </span>
   );
-}
-
-function VendorGlyph({ vendor }: { vendor: string }) {
-  if (vendor === "openai") {
-    return <OpenAiLogoIcon size={14} />;
-  }
-  if (vendor === "moonshot") {
-    return <MoonStarsIcon size={14} weight="fill" />;
-  }
-  if (vendor === "anthropic") {
-    return <SparkleIcon size={14} weight="fill" />;
-  }
-  return <span className="text-[11px] font-semibold uppercase">{vendor.charAt(0)}</span>;
 }

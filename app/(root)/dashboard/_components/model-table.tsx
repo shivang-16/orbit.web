@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ModalityBadgeList } from "@/components/models/modality-badge";
 import { ModelIdentity } from "@/components/models/model-identity";
 import { formatContext, type CatalogueModel } from "@/lib/catalogue";
 
@@ -38,18 +39,20 @@ export function ModelTable({
         </div>
         <ol>
           {models.map((model, index) => (
-            <li
-              key={model.id}
-              className="grid grid-cols-[1.25rem_minmax(0,1fr)_4rem_5.5rem] items-center gap-3 border-b border-white/5 py-3 last:border-b-0"
-            >
-              <span className="text-[13px] text-zinc-500">{index + 1}</span>
-              <ModelIdentity name={model.name} vendor={model.vendor} showVendor={false} />
-              <span className="text-right text-[13px] tabular-nums text-zinc-400">
-                {formatContext(model.input_context_limit)}
-              </span>
-              <span className="truncate text-right text-xs text-zinc-500">
-                {model.modalities.join(", ")}
-              </span>
+            <li key={model.id} className="border-b border-white/5 last:border-b-0">
+              <Link
+                href={`/dashboard/models/${model.id}`}
+                className="grid grid-cols-[1.25rem_minmax(0,1fr)_4rem_5.5rem] items-center gap-3 py-3 transition-colors hover:bg-white/[0.03]"
+              >
+                <span className="text-[13px] text-zinc-500">{index + 1}</span>
+                <ModelIdentity name={model.name} vendor={model.vendor} showVendor={false} />
+                <span className="text-right text-[13px] tabular-nums text-zinc-400">
+                  {formatContext(model.input_context_limit)}
+                </span>
+                <span className="flex justify-end">
+                  <ModalityBadgeList modalities={model.modalities} size={16} />
+                </span>
+              </Link>
             </li>
           ))}
           {models.length === 0 ? (

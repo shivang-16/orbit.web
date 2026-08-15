@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ModelIdentity, vendorLabel } from "@/components/models/model-identity";
 import { formatContext, type CatalogueModel } from "@/lib/catalogue";
 
@@ -25,17 +27,19 @@ export function FrontierCard({ models }: { models: CatalogueModel[] }) {
         </div>
         <ol>
           {models.map((model, index) => (
-            <li
-              key={model.id}
-              className="flex items-center gap-4 border-b border-white/5 py-3 last:border-b-0"
-            >
-              <span className="w-3 text-[13px] text-zinc-500">{index + 1}</span>
-              <div className="min-w-0 flex-1">
-                <ModelIdentity name={model.name} vendor={model.vendor} />
-              </div>
-              <span className="text-[13px] tabular-nums text-zinc-400">
-                {formatContext(model.input_context_limit)}
-              </span>
+            <li key={model.id} className="border-b border-white/5 last:border-b-0">
+              <Link
+                href={`/dashboard/models/${model.id}`}
+                className="flex items-center gap-4 py-3 transition-colors hover:bg-white/[0.03]"
+              >
+                <span className="w-3 text-[13px] text-zinc-500">{index + 1}</span>
+                <div className="min-w-0 flex-1">
+                  <ModelIdentity name={model.name} vendor={model.vendor} />
+                </div>
+                <span className="text-[13px] tabular-nums text-zinc-400">
+                  {formatContext(model.input_context_limit)}
+                </span>
+              </Link>
             </li>
           ))}
         </ol>

@@ -49,9 +49,9 @@ function HighlightCard({
 
       {model ? (
         <>
-          <div className="mt-3">
+          <Link href={`/dashboard/models/${model.id}`} className="mt-3 block hover:underline">
             <ModelIdentity name={model.name} vendor={model.vendor} showVendor={false} />
-          </div>
+          </Link>
           <p className="mt-3 flex items-baseline gap-1.5">
             <span className="text-[26px] leading-none font-semibold tracking-tight text-white">
               {count}
