@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { Loader } from "@/components/ui/loader";
 import { fetchCatalogueOverview, type CatalogueOverview } from "@/lib/catalogue";
 
 import { FrontierCard } from "./frontier-card";
@@ -33,7 +34,11 @@ export function Overview() {
   }
 
   if (!data) {
-    return <Shell><p className="text-[13px] text-zinc-500">Loading models…</p></Shell>;
+    return (
+      <Shell>
+        <Loader />
+      </Shell>
+    );
   }
 
   return (

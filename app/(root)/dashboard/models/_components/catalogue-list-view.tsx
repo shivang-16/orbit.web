@@ -37,16 +37,16 @@ export function CatalogueListView({ models }: { models: CatalogueModel[] }) {
                       {tagLabel(primaryTag)}
                     </span>
                   ) : null}
-                  <span title={modelDescription(model)} className="shrink-0 text-zinc-600">
+                  <span title={modelDescription(model)} className="shrink-0 text-zinc-500">
                     <InfoIcon size={12} />
                   </span>
                 </div>
 
-                <p className="mt-1 line-clamp-2 text-[13px] text-zinc-500">
+                <p className="mt-1 line-clamp-2 text-[13px] text-zinc-400">
                   {modelDescription(model)}
                 </p>
 
-                <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-500">
+                <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-400">
                   <span>by {model.vendor}</span>
                   <Dot />
                   <span>Added {formatAddedDate(model.created_at)}</span>
@@ -62,7 +62,7 @@ export function CatalogueListView({ models }: { models: CatalogueModel[] }) {
                   {secondaryTags.map((value) => (
                     <span
                       key={value}
-                      className="rounded-md bg-white/5 px-1.5 py-0.5 text-[11px] text-zinc-400"
+                      className="rounded-md bg-white/5 px-1.5 py-0.5 text-[11px] text-zinc-300"
                     >
                       {tagLabel(value)}
                     </span>
@@ -78,5 +78,5 @@ export function CatalogueListView({ models }: { models: CatalogueModel[] }) {
 }
 
 function Dot() {
-  return <span className="text-zinc-700">·</span>;
+  return <span className="text-zinc-600">·</span>;
 }

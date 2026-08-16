@@ -42,7 +42,7 @@ function HighlightCard({
     <article
       className={`rounded-xl border border-white/10 bg-[#0b0b0c] p-4 ${wide ? "col-span-2" : ""}`}
     >
-      <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+      <div className="flex items-center gap-1.5 text-xs text-zinc-400">
         {CARD_TITLE[tag] ?? tagLabel(tag)}
         <InfoIcon size={12} />
       </div>
@@ -56,19 +56,19 @@ function HighlightCard({
             <span className="text-[26px] leading-none font-semibold tracking-tight text-white">
               {count}
             </span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-zinc-400">
               {count === 1 ? "model" : "models"} tagged
             </span>
           </p>
           <Link
             href={`/dashboard/models?tag=${tag}`}
-            className="mt-2 inline-block text-xs text-zinc-500 transition-colors hover:text-zinc-300"
+            className="mt-2 inline-block text-xs text-zinc-400 transition-colors hover:text-zinc-300"
           >
             {formatContext(model.input_context_limit)} context · view {tagLabel(tag).toLowerCase()}
           </Link>
         </>
       ) : (
-        <p className="mt-4 text-[13px] text-zinc-500">Nothing tagged yet.</p>
+        <p className="mt-4 text-[13px] text-zinc-400">Nothing tagged yet.</p>
       )}
     </article>
   );

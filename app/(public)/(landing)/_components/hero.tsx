@@ -14,7 +14,7 @@ export function Hero() {
           <span className="block">at half the price.</span>
         </h1>
 
-        <p className="mt-7 max-w-xl text-base leading-relaxed text-zinc-400 lg:text-lg">
+        <p className="mt-7 max-w-xl text-base leading-relaxed text-zinc-300 lg:text-lg">
           One API for Claude, GPT, Gemini and 200+ more. Orbit routes every
           request to the cheapest healthy provider — no markup, no lock-in.
         </p>
@@ -34,12 +34,12 @@ export function Hero() {
             href="/models"
             className="flex h-12 items-center gap-2 rounded-xl px-4 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5 hover:text-white"
           >
-            <Layers className="size-4 text-zinc-500" />
+            <Layers className="size-4 text-zinc-400" />
             Browse models
           </Link>
         </div>
 
-        <p className="mt-8 text-[13px] text-zinc-600">
+        <p className="mt-8 text-[13px] text-zinc-500">
           $5 in free credits to start &middot; No credit card required &middot;
           Pay only for what you use.
         </p>

@@ -7,7 +7,7 @@ export function OverviewHeader({ total }: { total: number }) {
         <h1 className="text-[17px] font-semibold tracking-tight text-white">
           Discover models
         </h1>
-        <p className="mt-1 text-[13px] text-zinc-500">
+        <p className="mt-1 text-[13px] text-zinc-400">
           Starting points from your catalogue, grouped by the tags you assigned.
         </p>
       </div>

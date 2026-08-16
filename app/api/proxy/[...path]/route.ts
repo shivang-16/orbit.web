@@ -31,6 +31,10 @@ async function handleRequest(req: NextRequest, context: RouteContext) {
     Accept: req.headers.get("accept") ?? "application/json",
     "Content-Type": req.headers.get("content-type") ?? "application/json",
   };
+  const organizationId = req.headers.get("x-organization-id");
+  if (organizationId) {
+    headers["X-Organization-Id"] = organizationId;
+  }
 
   const { getToken } = await auth();
   const token = await getToken();

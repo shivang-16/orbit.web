@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 import { fetchCatalogue, type CatalogueModel, type CatalogueTagSummary } from "@/lib/catalogue";
 import { vendorLabel } from "@/components/models/model-identity";
+import { Loader } from "@/components/ui/loader";
 
 import { CatalogueListView } from "./catalogue-list-view";
 import { CatalogueTableView } from "./catalogue-table-view";
@@ -95,7 +96,7 @@ export function CatalogueList() {
       {error ? (
         <p className="mt-4 text-[13px] text-red-400">{error}</p>
       ) : models === null ? (
-        <p className="mt-4 text-[13px] text-zinc-500">Loading models…</p>
+        <Loader />
       ) : (
         <div className="mt-4 space-y-4">
           <CatalogueToolbar
@@ -112,7 +113,7 @@ export function CatalogueList() {
 
           <ModalityTabs active={modality} onChange={setModality} counts={modalityCounts} />
 
-          <p className="text-[13px] text-zinc-500">
+          <p className="text-[13px] text-zinc-400">
             {filteredModels.length} model{filteredModels.length === 1 ? "" : "s"}
           </p>
 
@@ -123,7 +124,7 @@ export function CatalogueList() {
               <CatalogueTableView models={filteredModels} />
             )
           ) : (
-            <p className="rounded-xl border border-white/10 bg-[#0b0b0c] px-4 py-8 text-center text-[13px] text-zinc-500">
+            <p className="rounded-xl border border-white/10 bg-[#0b0b0c] px-4 py-8 text-center text-[13px] text-zinc-400">
               No models match your filters.
             </p>
           )}

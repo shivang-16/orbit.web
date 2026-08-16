@@ -15,7 +15,7 @@ export function AuthControls() {
         <SignInButton {...afterAuth}>
           <button
             type="button"
-            className="hidden h-8 items-center px-2 text-sm text-zinc-400 transition-colors hover:text-white sm:flex"
+            className="hidden h-8 items-center px-2 text-sm text-zinc-300 transition-colors hover:text-white sm:flex"
           >
             Sign in
           </button>

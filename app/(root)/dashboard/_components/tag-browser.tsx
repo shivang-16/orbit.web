@@ -10,10 +10,10 @@ export function TagBrowser({ tags }: { tags: CatalogueTagSummary[] }) {
   return (
     <section>
       <div className="flex items-end justify-between gap-4">
-        <h2 className="text-[13px] text-zinc-400">Browse by tag</h2>
+        <h2 className="text-[13px] text-zinc-300">Browse by tag</h2>
         <Link
           href="/dashboard/models"
-          className="text-[13px] text-zinc-400 underline-offset-4 transition-colors hover:text-white hover:underline"
+          className="text-[13px] text-zinc-300 underline-offset-4 transition-colors hover:text-white hover:underline"
         >
           View all tags
         </Link>
@@ -27,13 +27,13 @@ export function TagBrowser({ tags }: { tags: CatalogueTagSummary[] }) {
             className="rounded-xl border border-white/10 bg-[#0b0b0c] p-4 transition-colors hover:border-white/20"
           >
             <div className="flex items-center gap-1.5 text-[13px] text-white">
-              <TagIcon size={13} className="text-zinc-500" />
+              <TagIcon size={13} className="text-zinc-400" />
               {tagLabel(item.tag)}
             </div>
-            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-zinc-500">
+            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-zinc-400">
               {tagDescription(item.tag)}
             </p>
-            <p className="mt-3 text-xs text-zinc-600">{item.count} models</p>
+            <p className="mt-3 text-xs text-zinc-500">{item.count} models</p>
           </Link>
         ))}
       </div>

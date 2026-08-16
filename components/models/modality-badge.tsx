@@ -41,7 +41,7 @@ const MODALITY_META: Record<string, ModalityMeta> = {
 const FALLBACK_META: ModalityMeta = {
   label: "Other",
   icon: FileTextIcon,
-  className: "bg-zinc-500/15 text-zinc-400",
+  className: "bg-zinc-500/15 text-zinc-300",
 };
 
 export function ModalityBadge({ modality, size = 18 }: { modality: string; size?: number }) {
@@ -71,7 +71,7 @@ export function ModalityBadgeList({
   size?: number;
   className?: string;
 }) {
-  if (modalities.length === 0) return <span className="text-zinc-600">—</span>;
+  if (modalities.length === 0) return <span className="text-zinc-500">—</span>;
 
   return (
     <span className={cn("inline-flex items-center gap-1", className)}>

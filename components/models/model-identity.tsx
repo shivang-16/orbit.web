@@ -25,7 +25,7 @@ export function ModelIdentity({
       <div className="min-w-0 leading-tight">
         <p className="truncate text-sm text-white">{name}</p>
         {showVendor ? (
-          <p className="truncate text-xs text-zinc-500">{vendorLabel(vendor)}</p>
+          <p className="truncate text-xs text-zinc-400">{vendorLabel(vendor)}</p>
         ) : null}
       </div>
     </div>

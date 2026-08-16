@@ -19,7 +19,7 @@ export function DashboardSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-svh w-64 shrink-0 flex-col border-r border-white/10 bg-black px-4 py-5">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-white/10 bg-black px-4 py-5">
       <Link
         href="/"
         className="flex items-center gap-2 px-1.5 font-mono text-[15px] font-medium tracking-tight text-white"
@@ -46,7 +46,7 @@ export function DashboardSidebar() {
                 "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition-colors",
                 active
                   ? "bg-white/10 text-white"
-                  : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                  : "text-zinc-300 hover:bg-white/5 hover:text-white"
               )}
             >
               <ItemIcon size={16} weight={active ? "fill" : "regular"} />

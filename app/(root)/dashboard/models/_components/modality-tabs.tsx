@@ -33,12 +33,12 @@ export function ModalityTabs({
             className={`flex items-center gap-1.5 border-b-2 px-3 py-2 text-[13px] transition-colors ${
               isActive
                 ? "border-white text-white"
-                : "border-transparent text-zinc-500 hover:text-zinc-300"
+                : "border-transparent text-zinc-400 hover:text-zinc-300"
             }`}
           >
             <TabIcon size={13} weight={isActive ? "bold" : "regular"} />
             {tab.label}
-            <span className="text-xs text-zinc-600">{counts[tab.key]}</span>
+            <span className="text-xs text-zinc-500">{counts[tab.key]}</span>
           </button>
         );
       })}

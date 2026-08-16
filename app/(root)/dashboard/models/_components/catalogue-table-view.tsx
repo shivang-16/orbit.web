@@ -12,7 +12,7 @@ export function CatalogueTableView({ models }: { models: CatalogueModel[] }) {
     <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#0b0b0c]">
       <table className="w-full min-w-[720px] text-left text-[13px]">
         <thead>
-          <tr className="border-b border-white/10 text-xs text-zinc-500">
+          <tr className="border-b border-white/10 text-xs text-zinc-400">
             <th className="px-4 py-2.5 font-normal">Model</th>
             <th className="px-4 py-2.5 font-normal">Tags</th>
             <th className="px-4 py-2.5 font-normal">Modalities</th>
@@ -33,7 +33,7 @@ export function CatalogueTableView({ models }: { models: CatalogueModel[] }) {
                   {model.tags.map((value) => (
                     <span
                       key={value}
-                      className="rounded-md bg-white/5 px-1.5 py-0.5 text-[11px] text-zinc-400"
+                      className="rounded-md bg-white/5 px-1.5 py-0.5 text-[11px] text-zinc-300"
                     >
                       {tagLabel(value)}
                     </span>
@@ -43,10 +43,10 @@ export function CatalogueTableView({ models }: { models: CatalogueModel[] }) {
               <td className="px-4 py-3">
                 <ModalityBadgeList modalities={model.modalities} size={18} />
               </td>
-              <td className="px-4 py-3 text-right tabular-nums text-zinc-400">
+              <td className="px-4 py-3 text-right tabular-nums text-zinc-300">
                 {formatContext(model.input_context_limit)}
               </td>
-              <td className="px-4 py-3 text-right text-zinc-500">
+              <td className="px-4 py-3 text-right text-zinc-400">
                 {formatAddedDate(model.created_at)}
               </td>
             </tr>

@@ -27,11 +27,11 @@ export function SiteHeader() {
             <Link
               key={item.label}
               href={item.href}
-              className="flex items-center gap-1 text-sm text-zinc-400 transition-colors hover:text-white"
+              className="flex items-center gap-1 text-sm text-zinc-300 transition-colors hover:text-white"
             >
               {item.label}
               {item.hasMenu ? (
-                <CaretDownIcon className="text-zinc-600" size={12} weight="bold" />
+                <CaretDownIcon className="text-zinc-500" size={12} weight="bold" />
               ) : null}
             </Link>
           ))}

@@ -48,13 +48,13 @@ export function CatalogueToolbar({
         <div className="relative min-w-[220px] flex-1 sm:max-w-xs">
           <MagnifyingGlassIcon
             size={14}
-            className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-zinc-500"
+            className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-zinc-400"
           />
           <input
             value={search}
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Search models"
-            className="h-8 w-full rounded-lg border border-white/10 bg-[#0b0b0c] pl-8 pr-3 text-[13px] text-white outline-none placeholder:text-zinc-500 focus:border-white/20"
+            className="h-8 w-full rounded-lg border border-white/10 bg-[#0b0b0c] pl-8 pr-3 text-[13px] text-white outline-none placeholder:text-zinc-400 focus:border-white/20"
           />
         </div>
 
@@ -64,9 +64,9 @@ export function CatalogueToolbar({
               type="button"
               className="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 bg-[#0b0b0c] px-2.5 text-[13px] text-zinc-300 transition-colors outline-none hover:border-white/20 hover:text-white aria-expanded:border-white/20"
             >
-              <SortAscendingIcon size={14} className="text-zinc-500" />
+              <SortAscendingIcon size={14} className="text-zinc-400" />
               {SORT_LABEL[sort]}
-              <CaretDownIcon size={11} className="text-zinc-500" />
+              <CaretDownIcon size={11} className="text-zinc-400" />
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
@@ -94,9 +94,9 @@ export function CatalogueToolbar({
               type="button"
               className="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 bg-[#0b0b0c] px-2.5 text-[13px] text-zinc-300 transition-colors outline-none hover:border-white/20 hover:text-white aria-expanded:border-white/20"
             >
-              <FunnelIcon size={14} className="text-zinc-500" />
+              <FunnelIcon size={14} className="text-zinc-400" />
               {tag ? tagLabel(tag) : "All tags"}
-              <CaretDownIcon size={11} className="text-zinc-500" />
+              <CaretDownIcon size={11} className="text-zinc-400" />
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
@@ -118,7 +118,7 @@ export function CatalogueToolbar({
                   className="flex cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
                 >
                   {tagLabel(option.tag)}
-                  <span className="text-xs text-zinc-500">{option.count}</span>
+                  <span className="text-xs text-zinc-400">{option.count}</span>
                 </DropdownMenu.Item>
               ))}
             </DropdownMenu.Content>
@@ -162,7 +162,7 @@ function ViewToggleButton({
       type="button"
       onClick={onClick}
       className={`flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs transition-colors ${
-        active ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"
+        active ? "bg-white/10 text-white" : "text-zinc-400 hover:text-zinc-300"
       }`}
     >
       <Icon size={13} />
