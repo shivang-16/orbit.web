@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useState } from "react";
 import Link from "next/link";
 import { ArrowSquareOutIcon, CheckIcon, CopyIcon, XIcon } from "@phosphor-icons/react";
 import { Dialog } from "radix-ui";
@@ -8,6 +8,10 @@ import { Dialog } from "radix-ui";
 import { Button } from "@/components/ui/button";
 import { chatEndpoint, curlSample, pythonSample, typescriptSample } from "@/lib/inference-docs";
 import { cn } from "@/lib/utils";
+
+const DEFAULT_WIDTH = 640;
+const MIN_WIDTH = 420;
+const MAX_WIDTH_RATIO = 0.85;
 
 type CodeTab = "python" | "typescript" | "curl";
 
@@ -29,6 +33,8 @@ export function TryModelDrawer({
   modelName: string;
 }) {
   const [tab, setTab] = useState<CodeTab>("python");
+  const [width, setWidth] = useState(DEFAULT_WIDTH);
+  const [dragging, setDragging] = useState(false);
 
   const samples: Record<CodeTab, string> = {
     python: pythonSample(modelId),
@@ -36,11 +42,63 @@ export function TryModelDrawer({
     curl: curlSample(modelId),
   };
 
+  const clampWidth = useCallback((next: number) => {
+    const max = Math.max(MIN_WIDTH, Math.round(window.innerWidth * MAX_WIDTH_RATIO));
+    return Math.min(max, Math.max(MIN_WIDTH, next));
+  }, []);
+
+  function onResizeStart(event: PointerEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setDragging(true);
+  }
+
+  function onResizeMove(event: PointerEvent<HTMLDivElement>) {
+    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    setWidth(clampWidth(window.innerWidth - event.clientX));
+  }
+
+  function onResizeEnd(event: PointerEvent<HTMLDivElement>) {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    setDragging(false);
+  }
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
-        <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-white/10 bg-[#0b0b0c] shadow-2xl outline-none">
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:duration-300 data-[state=closed]:duration-200" />
+        <Dialog.Content
+          className={cn(
+            "fixed inset-y-0 right-0 z-50 flex flex-col border-l border-white/10 bg-[#0b0b0c] shadow-2xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right data-[state=open]:duration-300 data-[state=closed]:duration-200 data-[state=open]:ease-out data-[state=closed]:ease-in",
+            dragging && "select-none"
+          )}
+          style={{ width }}
+        >
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize panel"
+            onPointerDown={onResizeStart}
+            onPointerMove={onResizeMove}
+            onPointerUp={onResizeEnd}
+            onPointerCancel={onResizeEnd}
+            className="absolute inset-y-0 left-0 z-10 flex w-4 -translate-x-1/2 cursor-ew-resize touch-none items-center justify-center"
+          >
+            <span
+              className={cn(
+                "flex h-10 w-3.5 items-center justify-center rounded-full border border-white/15 bg-[#1a1a1a] shadow-md transition-colors",
+                dragging ? "border-white/30 bg-white/15" : "hover:border-white/25 hover:bg-white/10"
+              )}
+            >
+              <span className="grid grid-cols-2 gap-0.5">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <span key={index} className="size-0.5 rounded-full bg-zinc-400" />
+                ))}
+              </span>
+            </span>
+          </div>
           <div className="flex items-start justify-between gap-4 border-b border-white/10 px-5 py-4">
             <div className="min-w-0">
               <Dialog.Title className="text-[15px] font-medium text-white">Quick Start</Dialog.Title>
