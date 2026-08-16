@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight, Layers } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
 import { HeroBackdrop } from "./hero-backdrop";
 
 export function Hero() {
@@ -20,23 +22,25 @@ export function Hero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
-          <Link
-            href="/sign-up"
-            className="group flex h-12 items-center gap-3 rounded-xl border border-white/15 bg-zinc-950 pr-1.5 pl-5 text-sm font-medium text-white transition-colors hover:border-white/25 hover:bg-zinc-900"
+          <Button
+            asChild
+            variant="outline"
+            className="group h-12 gap-3 rounded-xl border-white/15 bg-zinc-950 pr-1.5 pl-5 text-sm"
           >
-            Start for free
-            <span className="flex size-9 items-center justify-center rounded-lg bg-white text-black">
-              <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />
-            </span>
-          </Link>
+            <Link href="/sign-up">
+              Start for free
+              <span className="flex size-9 items-center justify-center rounded-lg bg-white text-black">
+                <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />
+              </span>
+            </Link>
+          </Button>
 
-          <Link
-            href="/models"
-            className="flex h-12 items-center gap-2 rounded-xl px-4 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5 hover:text-white"
-          >
-            <Layers className="size-4 text-zinc-400" />
-            Browse models
-          </Link>
+          <Button asChild variant="ghost" className="h-12 rounded-xl px-4 text-sm text-zinc-300">
+            <Link href="/models">
+              <Layers className="size-4 text-zinc-400" />
+              Browse models
+            </Link>
+          </Button>
         </div>
 
         <p className="mt-8 text-[13px] text-zinc-500">

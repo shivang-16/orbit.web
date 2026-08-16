@@ -6,6 +6,7 @@ import { DropdownMenu } from "radix-ui";
 
 import { CreateOrgDialog } from "@/components/org/create-org-dialog";
 import { useOrg } from "@/components/org/org-context";
+import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 
 export function OrgSwitcher() {
@@ -16,9 +17,10 @@ export function OrgSwitcher() {
     <>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
-          <button
+          <Button
             type="button"
-            className="flex w-full items-center justify-between rounded-lg border border-white/10 px-2.5 py-2 text-sm font-medium text-white transition-colors outline-none hover:border-white/20 hover:bg-white/5 aria-expanded:border-white/20 aria-expanded:bg-white/5"
+            variant="outline"
+            className="h-auto w-full justify-between px-2.5 py-2 font-medium"
           >
             {activeOrganization?.name ? (
               <span className="truncate">{activeOrganization.name}</span>
@@ -28,7 +30,7 @@ export function OrgSwitcher() {
               <span className="truncate">Select organization</span>
             )}
             <CaretUpDownIcon size={14} className="shrink-0 text-zinc-400" />
-          </button>
+          </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
           <DropdownMenu.Content

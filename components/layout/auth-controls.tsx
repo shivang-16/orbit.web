@@ -13,12 +13,9 @@ export function AuthControls() {
     <>
       <Show when="signed-out">
         <SignInButton {...afterAuth}>
-          <button
-            type="button"
-            className="hidden h-8 items-center px-2 text-sm text-zinc-300 transition-colors hover:text-white sm:flex"
-          >
+          <Button type="button" variant="ghost" className="hidden sm:inline-flex">
             Sign in
-          </button>
+          </Button>
         </SignInButton>
         <SignUpButton {...afterAuth}>
           <Button type="button" variant="pill" className="pr-1 pl-3.5">

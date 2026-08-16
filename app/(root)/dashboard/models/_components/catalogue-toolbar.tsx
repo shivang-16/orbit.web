@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import { DropdownMenu } from "radix-ui";
 
+import { Button } from "@/components/ui/button";
 import type { CatalogueTagSummary } from "@/lib/catalogue";
 import { tagLabel } from "@/lib/tags";
 
@@ -60,14 +61,11 @@ export function CatalogueToolbar({
 
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button
-              type="button"
-              className="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 bg-[#0b0b0c] px-2.5 text-[13px] text-zinc-300 transition-colors outline-none hover:border-white/20 hover:text-white aria-expanded:border-white/20"
-            >
+            <Button type="button" variant="outline" className="text-zinc-300">
               <SortAscendingIcon size={14} className="text-zinc-400" />
               {SORT_LABEL[sort]}
               <CaretDownIcon size={11} className="text-zinc-400" />
-            </button>
+            </Button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content
@@ -90,14 +88,11 @@ export function CatalogueToolbar({
 
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button
-              type="button"
-              className="flex h-8 items-center gap-1.5 rounded-lg border border-white/10 bg-[#0b0b0c] px-2.5 text-[13px] text-zinc-300 transition-colors outline-none hover:border-white/20 hover:text-white aria-expanded:border-white/20"
-            >
+            <Button type="button" variant="outline" className="text-zinc-300">
               <FunnelIcon size={14} className="text-zinc-400" />
               {tag ? tagLabel(tag) : "All tags"}
               <CaretDownIcon size={11} className="text-zinc-400" />
-            </button>
+            </Button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content
@@ -158,15 +153,15 @@ function ViewToggleButton({
   label: string;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="sm"
       onClick={onClick}
-      className={`flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs transition-colors ${
-        active ? "bg-white/10 text-white" : "text-zinc-400 hover:text-zinc-300"
-      }`}
+      className={active ? "bg-white/10 text-white" : "text-zinc-400"}
     >
       <Icon size={13} />
       {label}
-    </button>
+    </Button>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { WalletIcon } from "@phosphor-icons/react";
 
 import { useOrg } from "@/components/org/org-context";
+import { Button } from "@/components/ui/button";
 import { fetchOrganizationCredits, formatCreditDollars } from "@/lib/credits";
 
 export function LoadCreditsButton() {
@@ -32,16 +33,15 @@ export function LoadCreditsButton() {
   }, [activeOrganization]);
 
   return (
-    <Link
-      href="/pricing"
-      className="flex h-7 items-center gap-2 rounded-full border border-white/15 bg-black px-2.5 text-[12px] transition-colors hover:border-white/25 hover:bg-white/5"
-    >
-      <WalletIcon size={13} className="shrink-0 text-zinc-300" />
-      <span className="text-zinc-300">Load credits</span>
-      <span className="h-3 w-px bg-white/20" />
-      <span className="font-medium text-white">
-        {remainingMicros === null ? "—" : formatCreditDollars(remainingMicros)}
-      </span>
-    </Link>
+    <Button asChild variant="outline" size="lg" className="px-3">
+      <Link href="/pricing">
+        <WalletIcon size={14} className="text-zinc-300" />
+        <span className="text-zinc-300">Load credits</span>
+        <span className="h-3.5 w-px bg-white/20" />
+        <span className="font-medium text-white">
+          {remainingMicros === null ? "—" : formatCreditDollars(remainingMicros)}
+        </span>
+      </Link>
+    </Button>
   );
 }

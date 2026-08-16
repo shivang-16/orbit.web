@@ -107,12 +107,9 @@ export function TryModelDrawer({
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>
-              <button
-                type="button"
-                className="shrink-0 rounded-md p-1 text-zinc-400 transition-colors hover:bg-white/5 hover:text-white"
-              >
+              <Button type="button" variant="ghost" size="icon-xs" className="shrink-0 text-zinc-400">
                 <XIcon size={16} />
-              </button>
+              </Button>
             </Dialog.Close>
           </div>
 
@@ -121,7 +118,7 @@ export function TryModelDrawer({
               <p className="text-[13px] text-zinc-400">
                 Create an API key from your Orbit dashboard and set it as an environment variable.
               </p>
-              <Button asChild size="sm" className="mt-3">
+              <Button asChild className="mt-3">
                 <Link href="/dashboard/api-keys" target="_blank">
                   Create API key
                   <ArrowSquareOutIcon size={13} data-icon="inline-end" />
@@ -219,13 +216,15 @@ function CodeBlock({ code, className }: { code: string; className?: string }) {
       <pre className="overflow-x-auto px-3 py-2.5 pr-9 font-mono text-[12px] leading-relaxed whitespace-pre text-zinc-300">
         {code}
       </pre>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-xs"
         onClick={copy}
-        className="absolute top-2 right-2 rounded-md p-1 text-zinc-500 transition-colors hover:bg-white/10 hover:text-white"
+        className="absolute top-2 right-2 text-zinc-500"
       >
         {copied ? <CheckIcon size={13} /> : <CopyIcon size={13} />}
-      </button>
+      </Button>
     </div>
   );
 }

@@ -14,6 +14,18 @@ export type CatalogueModel = {
   created_at: string;
 };
 
+export type ModelPricing = {
+  id: string;
+  model_catalogue_id: string;
+  vendor_input_per_million_micros: number;
+  vendor_output_per_million_micros: number;
+  currency: string;
+};
+
+export type CatalogueModelDetail = CatalogueModel & {
+  pricing: ModelPricing | null;
+};
+
 export type CatalogueHighlight = {
   tag: string;
   model: CatalogueModel | null;
@@ -101,8 +113,20 @@ export function fetchCatalogue(tag?: string) {
 }
 
 export async function fetchCatalogueModel(id: string) {
-  const raw = (await apiFetch(`/catalogue/${encodeURIComponent(id)}`)) as { model: CatalogueModel };
-  return raw.model;
+  const raw = (await apiFetch(`/catalogue/${encodeURIComponent(id)}`)) as {
+    model: CatalogueModel;
+    pricing: ModelPricing | null;
+  };
+  return { ...raw.model, pricing: raw.pricing ?? null } as CatalogueModelDetail;
+}
+
+export function formatPerMillion(micros: number) {
+  return (micros / 1_000_000).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  });
 }
 
 export function formatContext(limit: number) {

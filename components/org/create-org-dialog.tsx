@@ -63,12 +63,9 @@ export function CreateOrgDialog({
               Create organization
             </Dialog.Title>
             <Dialog.Close asChild>
-              <button
-                type="button"
-                className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-white/5 hover:text-white"
-              >
+              <Button type="button" variant="ghost" size="icon-xs" className="text-zinc-400">
                 <XIcon size={16} />
-              </button>
+              </Button>
             </Dialog.Close>
           </div>
 

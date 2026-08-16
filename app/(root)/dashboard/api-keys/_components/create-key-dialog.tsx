@@ -80,12 +80,9 @@ export function CreateKeyDialog({ onCreated }: { onCreated: () => void }) {
               {created ? "API key created" : "Create API key"}
             </Dialog.Title>
             <Dialog.Close asChild>
-              <button
-                type="button"
-                className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-white/5 hover:text-white"
-              >
+              <Button type="button" variant="ghost" size="icon-xs" className="text-zinc-400">
                 <XIcon size={16} />
-              </button>
+              </Button>
             </Dialog.Close>
           </div>
 
@@ -98,13 +95,15 @@ export function CreateKeyDialog({ onCreated }: { onCreated: () => void }) {
                 <code className="min-w-0 flex-1 truncate font-mono text-[12px] text-white">
                   {created.secret}
                 </code>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon-xs"
                   onClick={copySecret}
-                  className="shrink-0 text-zinc-300 transition-colors hover:text-white"
+                  className="text-zinc-300"
                 >
                   {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
-                </button>
+                </Button>
               </div>
               <div className="flex justify-end">
                 <Dialog.Close asChild>
@@ -128,12 +127,14 @@ export function CreateKeyDialog({ onCreated }: { onCreated: () => void }) {
                 <span className="text-[13px] text-zinc-300">Expiration</span>
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger asChild>
-                    <button
+                    <Button
                       type="button"
-                      className="mt-1.5 flex h-9 w-full items-center justify-between rounded-lg border border-white/10 bg-black px-3 text-left text-[13px] text-white outline-none hover:border-white/20"
+                      variant="outline"
+                      size="lg"
+                      className="mt-1.5 w-full justify-between px-3 text-[13px] font-normal"
                     >
                       {EXPIRATION_OPTIONS.find((option) => option.value === expiration)?.label}
-                    </button>
+                    </Button>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Portal>
                     <DropdownMenu.Content
