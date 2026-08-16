@@ -49,11 +49,13 @@ export function DashboardSidebar() {
     <aside className="flex h-full w-64 shrink-0 flex-col border-r border-white/10 bg-black px-4 py-5">
       <Link
         href="/"
-        className="flex items-center gap-2 px-1.5 font-mono text-[15px] font-medium tracking-tight text-white"
+        className="flex items-center gap-2.5 px-1.5 font-mono text-[15px] font-medium tracking-tight text-white"
       >
-        <span className="flex size-6 items-center justify-center rounded-md bg-white text-xs font-bold text-black">
-          O
-        </span>
+        <img
+          src="/assets/orbit.png"
+          alt="Orbit"
+          className="size-5 object-contain rounded-sm invert"
+        />
         orbit
       </Link>
 
