@@ -3,12 +3,14 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ArrowRightIcon, PlayIcon } from "@phosphor-icons/react";
 
 import { VendorLogo } from "@/components/models/vendor-logo";
 import { vendorLabel } from "@/components/models/model-identity";
 import { ModalityBadge, ModalityBadgeList } from "@/components/models/modality-badge";
 import { ProviderLogo } from "@/components/models/provider-logo";
+import { TryModelDrawer } from "@/components/models/try-model-drawer";
+import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { fetchCatalogueModel, formatContext, type CatalogueModel } from "@/lib/catalogue";
 import { providerLabel } from "@/lib/providers";
@@ -64,17 +66,33 @@ export default function ModelDetailPage() {
 }
 
 function ModelDetail({ model }: { model: CatalogueModel }) {
+  const [tryOpen, setTryOpen] = useState(false);
+
   return (
     <div className="mt-5">
-      <div className="flex items-start gap-3">
-        <VendorLogo vendor={model.vendor} className="size-10" />
-        <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight text-white">{model.name}</h1>
-          <p className="mt-0.5 text-[13px] text-zinc-400">
-            {model.vendor}/{slugify(model.name)}
-          </p>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <VendorLogo vendor={model.vendor} className="size-10" />
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold tracking-tight text-white">{model.name}</h1>
+            <p className="mt-0.5 text-[13px] text-zinc-400">
+              {model.vendor}/{slugify(model.name)}
+            </p>
+          </div>
         </div>
+
+        <Button size="sm" onClick={() => setTryOpen(true)} className="shrink-0">
+          <PlayIcon size={13} weight="fill" />
+          Try this model
+        </Button>
       </div>
+
+      <TryModelDrawer
+        open={tryOpen}
+        onOpenChange={setTryOpen}
+        modelId={model.id}
+        modelName={model.name}
+      />
 
       <p className="mt-4 w-full text-[15px] leading-relaxed text-zinc-300">
         {modelDescription(model)}
