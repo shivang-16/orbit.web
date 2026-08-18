@@ -6,7 +6,23 @@ import { ArrowSquareOutIcon, CheckIcon, CopyIcon, XIcon } from "@phosphor-icons/
 import { Dialog } from "radix-ui";
 
 import { Button } from "@/components/ui/button";
-import { chatEndpoint, curlSample, pythonSample, typescriptSample } from "@/lib/inference-docs";
+import {
+  anthropicBaseUrl,
+  anthropicCurlSample,
+  anthropicPythonSample,
+  anthropicStreamCurlSample,
+  anthropicTypescriptSample,
+  chatEndpoint,
+  curlSample,
+  openaiBaseUrl,
+  openaiCurlSample,
+  openaiPythonSample,
+  openaiStreamCurlSample,
+  openaiTypescriptSample,
+  pythonSample,
+  streamCurlSample,
+  typescriptSample,
+} from "@/lib/inference-docs";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_WIDTH = 640;
@@ -14,33 +30,95 @@ const MIN_WIDTH = 420;
 const MAX_WIDTH_RATIO = 0.85;
 
 type CodeTab = "python" | "typescript" | "curl";
+type SdkTab = "orbit" | "openai" | "anthropic";
 
-const TABS: { key: CodeTab; label: string }[] = [
+const CODE_TABS: { key: CodeTab; label: string }[] = [
   { key: "python", label: "Python" },
   { key: "typescript", label: "TypeScript (fetch)" },
   { key: "curl", label: "cURL" },
 ];
 
+const SDK_TABS: { key: SdkTab; label: string }[] = [
+  { key: "orbit", label: "Orbit API" },
+  { key: "openai", label: "OpenAI SDK" },
+  { key: "anthropic", label: "Anthropic SDK" },
+];
+
 export function TryModelDrawer({
   open,
   onOpenChange,
-  modelId,
+  modelSlug,
   modelName,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  modelId: string;
+  modelSlug: string;
   modelName: string;
 }) {
+  const [sdkTab, setSdkTab] = useState<SdkTab>("orbit");
   const [tab, setTab] = useState<CodeTab>("python");
   const [width, setWidth] = useState(DEFAULT_WIDTH);
   const [dragging, setDragging] = useState(false);
 
-  const samples: Record<CodeTab, string> = {
-    python: pythonSample(modelId),
-    typescript: typescriptSample(modelId),
-    curl: curlSample(modelId),
+  // The native endpoint resolves models by slug or UUID, so every sample
+  // (including Orbit's own) uses the short, human-readable slug.
+  const samplesBySdk: Record<SdkTab, Record<CodeTab, string>> = {
+    orbit: {
+      python: pythonSample(modelSlug),
+      typescript: typescriptSample(modelSlug),
+      curl: curlSample(modelSlug),
+    },
+    openai: {
+      python: openaiPythonSample(modelSlug),
+      typescript: openaiTypescriptSample(modelSlug),
+      curl: openaiCurlSample(modelSlug),
+    },
+    anthropic: {
+      python: anthropicPythonSample(modelSlug),
+      typescript: anthropicTypescriptSample(modelSlug),
+      curl: anthropicCurlSample(modelSlug),
+    },
   };
+  const samples = samplesBySdk[sdkTab];
+  const streamSampleBySdk: Record<SdkTab, string> = {
+    orbit: streamCurlSample(modelSlug),
+    openai: openaiStreamCurlSample(modelSlug),
+    anthropic: anthropicStreamCurlSample(modelSlug),
+  };
+
+  const endpoints: EndpointCardData[] = [
+    {
+      description: "Sends a chat request and returns the model's response. Supports streaming and non-streaming.",
+      method: "POST",
+      url: chatEndpoint(modelSlug),
+      fields: [
+        { label: "Authorization", value: "Bearer $ORBIT_API_KEY" },
+        { label: "Content-Type", value: "application/json" },
+        { label: "Model", value: modelSlug },
+      ],
+    },
+    {
+      description: "OpenAI Chat Completions compatibility. Point the official SDK at Orbit with base_url and api_key.",
+      method: "POST",
+      url: `${openaiBaseUrl()}/chat/completions`,
+      fields: [
+        { label: "Authorization", value: "Bearer $ORBIT_API_KEY" },
+        { label: "Content-Type", value: "application/json" },
+        { label: "Model", value: modelSlug },
+      ],
+    },
+    {
+      description: "Anthropic Messages compatibility. Supports text, tools, and streaming. Auth is sent as x-api-key.",
+      method: "POST",
+      url: `${anthropicBaseUrl()}/v1/messages`,
+      fields: [
+        { label: "x-api-key", value: "$ORBIT_API_KEY" },
+        { label: "anthropic-version", value: "2023-06-01" },
+        { label: "Content-Type", value: "application/json" },
+        { label: "Model", value: modelSlug },
+      ],
+    },
+  ];
 
   const clampWidth = useCallback((next: number) => {
     const max = Math.max(MIN_WIDTH, Math.round(window.innerWidth * MAX_WIDTH_RATIO));
@@ -101,8 +179,8 @@ export function TryModelDrawer({
           </div>
           <div className="flex items-start justify-between gap-4 border-b border-white/10 px-5 py-4">
             <div className="min-w-0">
-              <Dialog.Title className="text-[15px] font-medium text-white">Quick Start</Dialog.Title>
-              <Dialog.Description className="mt-1 text-[13px] text-zinc-400">
+              <Dialog.Title className="text-[17px] font-medium text-white">Quick Start</Dialog.Title>
+              <Dialog.Description className="mt-1 text-[14.5px] text-zinc-400">
                 Drop-in code to call {modelName} with Orbit&apos;s API.
               </Dialog.Description>
             </div>
@@ -115,7 +193,7 @@ export function TryModelDrawer({
 
           <div className="flex-1 space-y-7 overflow-y-auto px-5 py-5">
             <Step number={1} title="Get your API key">
-              <p className="text-[13px] text-zinc-400">
+              <p className="text-[14.5px] text-zinc-400">
                 Create an API key from your Orbit dashboard and set it as an environment variable.
               </p>
               <Button asChild className="mt-3">
@@ -128,21 +206,18 @@ export function TryModelDrawer({
             </Step>
 
             <Step number={2} title="Make your first request">
-              <p className="text-[13px] text-zinc-400">
-                Send messages to{" "}
-                <code className="rounded bg-white/10 px-1 py-0.5 text-[11px] text-zinc-300">{modelId}</code> and get
-                the model&apos;s response back directly — no routing decisions to make.
-              </p>
-
-              <div className="mt-3 flex gap-1 rounded-lg bg-white/5 p-1">
-                {TABS.map((item) => (
+              <div className="grid grid-cols-3 gap-1.5">
+                {SDK_TABS.map((item) => (
                   <button
                     key={item.key}
                     type="button"
-                    onClick={() => setTab(item.key)}
+                    onClick={() => setSdkTab(item.key)}
+                    aria-pressed={sdkTab === item.key}
                     className={cn(
-                      "flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors",
-                      tab === item.key ? "bg-white/10 text-white" : "text-zinc-400 hover:text-white"
+                      "rounded-lg border px-2.5 py-2 text-center text-[13.5px] font-medium transition-all",
+                      sdkTab === item.key
+                        ? "border-white/25 bg-white/[0.08] text-white"
+                        : "border-white/10 text-zinc-400 hover:border-white/15 hover:text-white"
                     )}
                   >
                     {item.label}
@@ -150,28 +225,59 @@ export function TryModelDrawer({
                 ))}
               </div>
 
+              <p className="mt-3 text-[14.5px] text-zinc-400">
+                Requests return a single JSON body by default. Pass{" "}
+                <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[13px] text-zinc-300">
+                  stream: true
+                </code>{" "}
+                in step 3 to receive tokens as they arrive.
+              </p>
+              <div className="mt-3 flex items-center gap-4 border-b border-white/10 text-[14px]">
+                {CODE_TABS.map((item) => (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => setTab(item.key)}
+                    className={cn(
+                      "relative -mb-px pb-2 font-medium transition-colors",
+                      tab === item.key ? "text-white" : "text-zinc-500 hover:text-zinc-300"
+                    )}
+                  >
+                    {item.key === "typescript" && sdkTab !== "orbit" ? "TypeScript" : item.label}
+                    {tab === item.key ? (
+                      <span className="absolute inset-x-0 -bottom-px h-px bg-white" />
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+
               <CodeBlock className="mt-3" code={samples[tab]} />
             </Step>
 
-            <Step number={3} title="Endpoint">
-              <p className="text-[13px] text-zinc-400">
-                Accepts chat messages and returns the provider&apos;s response as JSON.
+            <Step number={3} title="Enable streaming">
+              <p className="text-[14.5px] text-zinc-400">
+                Add{" "}
+                <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[13px] text-zinc-300">
+                  &quot;stream&quot;: true
+                </code>{" "}
+                to your request body to receive responses as server-sent events:
               </p>
-              <div className="mt-3 space-y-2 rounded-lg border border-white/10 bg-black px-3 py-3 text-[12px]">
-                <Row label="Method">
-                  <span className="font-mono text-zinc-300">POST</span>
-                </Row>
-                <Row label="URL">
-                  <span className="font-mono break-all text-zinc-300">{chatEndpoint(modelId)}</span>
-                </Row>
-                <Row label="Authorization">
-                  <span className="font-mono text-zinc-300">Bearer $ORBIT_API_KEY</span>
-                </Row>
-                <Row label="Content-Type">
-                  <span className="font-mono text-zinc-300">application/json</span>
-                </Row>
-              </div>
+              <CodeBlock className="mt-3" code={streamSampleBySdk[sdkTab]} />
             </Step>
+
+            <section>
+              <div className="flex items-center gap-2">
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-[12px] font-medium text-white">
+                  4
+                </span>
+                <h3 className="text-[15px] font-medium text-white">API endpoints</h3>
+              </div>
+              <div className="mt-3 space-y-5 pl-8">
+                {endpoints.map((item) => (
+                  <EndpointCard key={item.url} {...item} />
+                ))}
+              </div>
+            </section>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
@@ -183,21 +289,55 @@ function Step({ number, title, children }: { number: number; title: string; chil
   return (
     <section>
       <div className="flex items-center gap-2">
-        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-white/10 text-[11px] font-medium text-white">
+        <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-[12px] font-medium text-white">
           {number}
         </span>
-        <h3 className="text-[13px] font-medium text-white">{title}</h3>
+        <h3 className="text-[15px] font-medium text-white">{title}</h3>
       </div>
-      <div className="mt-2 pl-7">{children}</div>
+      <div className="mt-2.5 pl-8">{children}</div>
     </section>
   );
 }
 
-function Row({ label, children }: { label: string; children: ReactNode }) {
+type EndpointField = { label: string; value: string; hint?: string };
+
+type EndpointCardData = {
+  description: string;
+  method: string;
+  url: string;
+  fields: EndpointField[];
+};
+
+function EndpointCard({ description, method, url, fields }: EndpointCardData) {
   return (
-    <div className="flex items-start justify-between gap-4">
-      <span className="shrink-0 text-zinc-500">{label}</span>
-      <span className="min-w-0 text-right">{children}</span>
+    <div>
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-[#111113]">
+        <div className="flex items-start gap-2.5 px-3.5 py-2.5 font-mono text-[13.5px]">
+          <span
+            className={cn(
+              "shrink-0 font-semibold",
+              method === "GET" ? "text-sky-400" : "text-emerald-400"
+            )}
+          >
+            {method}
+          </span>
+          <span className="min-w-0 break-all text-zinc-300">{url}</span>
+        </div>
+        <div className="border-t border-white/10 px-3.5 py-2.5">
+          <dl className="space-y-1.5 text-[13.5px]">
+            {fields.map((field) => (
+              <div key={field.label} className="flex items-start justify-between gap-4">
+                <dt className="shrink-0 text-zinc-500">{field.label}</dt>
+                <dd className="min-w-0 text-right font-mono text-zinc-200">
+                  <span className="font-medium">{field.value}</span>
+                  {field.hint ? <span className="ml-1.5 font-sans font-normal text-zinc-500">— {field.hint}</span> : null}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+      <p className="mt-2 text-[14px] leading-snug text-zinc-400">{description}</p>
     </div>
   );
 }
@@ -213,7 +353,7 @@ function CodeBlock({ code, className }: { code: string; className?: string }) {
 
   return (
     <div className={cn("group relative rounded-lg border border-white/10 bg-black", className)}>
-      <pre className="overflow-x-auto px-3 py-2.5 pr-9 font-mono text-[12px] leading-relaxed whitespace-pre text-zinc-300">
+      <pre className="overflow-x-auto px-3 py-3 pr-9 font-mono text-[13.5px] leading-relaxed whitespace-pre text-zinc-300">
         {code}
       </pre>
       <Button

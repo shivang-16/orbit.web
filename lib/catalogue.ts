@@ -3,6 +3,7 @@ import { apiFetch } from "@/lib/api";
 export type CatalogueModel = {
   id: string;
   name: string;
+  slug: string;
   vendor: string;
   provider: string;
   model_id: string;

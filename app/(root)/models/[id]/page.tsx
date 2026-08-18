@@ -95,7 +95,7 @@ function ModelDetail({ model }: { model: CatalogueModelDetail }) {
       <TryModelDrawer
         open={tryOpen}
         onOpenChange={setTryOpen}
-        modelId={model.id}
+        modelSlug={model.slug}
         modelName={model.name}
       />
 
