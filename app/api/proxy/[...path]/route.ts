@@ -1,5 +1,5 @@
 /**
- * Browser → /api/proxy/<path> → API_BASE_URL/api/v1/<path>
+ * Browser → /api/proxy/<path> → NEXT_PUBLIC_API_BASE_URL/api/v1/<path>
  *
  * Attaches the Clerk session JWT so the Go API can verify the user.
  * The browser never talks to orbit.api directly.
@@ -8,7 +8,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { type NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL = (process.env.API_BASE_URL ?? "").replace(/\/+$/, "");
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").replace(/\/+$/, "");
 const API_VERSION_PREFIX = "/api/v1";
 
 type RouteContext = {
@@ -18,7 +18,7 @@ type RouteContext = {
 async function handleRequest(req: NextRequest, context: RouteContext) {
   if (!API_BASE_URL) {
     return NextResponse.json(
-      { error: "API_BASE_URL is not set" },
+      { error: "NEXT_PUBLIC_API_BASE_URL is not set" },
       { status: 500 },
     );
   }
