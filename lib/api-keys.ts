@@ -8,6 +8,7 @@ export type APIKey = {
   created_by: string;
   name: string;
   key_preview: string;
+  status: "active" | "inactive";
   expires_at: string | null;
   last_used_at: string | null;
   created_at: string;
@@ -33,6 +34,10 @@ export function createAPIKey(name: string, expiration: APIKeyExpiration) {
     method: "POST",
     body: JSON.stringify({ name, expiration }),
   }) as Promise<CreateAPIKeyResponse>;
+}
+
+export function deleteAPIKey(id: string) {
+  return apiFetch(`/api-keys/${id}`, { method: "DELETE" });
 }
 
 export function formatKeyDate(value: string | null) {
