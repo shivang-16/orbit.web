@@ -44,7 +44,7 @@ export function Hero() {
         </div>
 
         <p className="mt-8 text-[13px] text-zinc-500">
-          $5 in free credits to start &middot; No credit card required &middot;
+          $2 in free credits to start &middot; No credit card required &middot;
           Pay only for what you use.
         </p>
       </div>
