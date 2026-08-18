@@ -139,7 +139,9 @@ export function PlaygroundDrawer({
           err instanceof PlaygroundError
             ? err.status === 402
               ? "Low on credits. Add credits to keep chatting."
-              : err.message
+              : err.status === 429
+                ? "Too many requests. Wait a moment and try again."
+                : err.message
             : "Could not reach this model.";
         setError(message);
         setMessages((current) =>
