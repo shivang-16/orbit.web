@@ -32,7 +32,10 @@ export function fetchCreditHistory() {
 }
 
 export function formatCreditDollars(micros: number) {
-  return (micros / 1_000_000).toLocaleString("en-US", {
+  // Header / summary balances stay at cents. Truncate leftover micros so
+  // $99.996988 displays as $99.99, not rounded up to $100.00.
+  const cents = Math.trunc(micros / 10_000) / 100;
+  return cents.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2,
@@ -40,11 +43,25 @@ export function formatCreditDollars(micros: number) {
   });
 }
 
+// History rows keep micros-level precision so a $0.000090 usage line
+// does not display as $0.00. Balances (header, summary cards) stay at
+// two decimal places.
 export function formatSignedCreditDollars(micros: number) {
-  const formatted = formatCreditDollars(Math.abs(micros));
+  const absMicros = Math.abs(Math.trunc(micros));
+  const fractionDigits = absMicros % 10_000 === 0 ? 2 : 6;
+  const formatted = formatDollars(Math.abs(micros), fractionDigits);
   if (micros > 0) return `+${formatted}`;
   if (micros < 0) return `-${formatted}`;
   return formatted;
+}
+
+function formatDollars(micros: number, fractionDigits: number) {
+  return (micros / 1_000_000).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 export function formatCreditDate(value: string) {
