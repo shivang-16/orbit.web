@@ -3,12 +3,13 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeftIcon, ArrowRightIcon, PlayIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ArrowRightIcon, FlaskIcon, PlayIcon } from "@phosphor-icons/react";
 
 import { VendorLogo } from "@/components/models/vendor-logo";
 import { vendorLabel } from "@/components/models/model-identity";
 import { ModalityBadge, ModalityBadgeList } from "@/components/models/modality-badge";
 import { ProviderLogo } from "@/components/models/provider-logo";
+import { PlaygroundDrawer } from "@/components/models/playground-drawer";
 import { TryModelDrawer } from "@/components/models/try-model-drawer";
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
@@ -72,6 +73,7 @@ export default function ModelDetailPage() {
 
 function ModelDetail({ model }: { model: CatalogueModelDetail }) {
   const [tryOpen, setTryOpen] = useState(false);
+  const [playgroundOpen, setPlaygroundOpen] = useState(false);
 
   return (
     <div className="mt-5">
@@ -86,12 +88,25 @@ function ModelDetail({ model }: { model: CatalogueModelDetail }) {
           </div>
         </div>
 
-        <Button onClick={() => setTryOpen(true)} className="shrink-0">
-          <PlayIcon size={13} weight="fill" />
-          Try this model
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button variant="outline" onClick={() => setPlaygroundOpen(true)}>
+            <FlaskIcon size={13} />
+            Playground
+          </Button>
+          <Button onClick={() => setTryOpen(true)}>
+            <PlayIcon size={13} weight="fill" />
+            Try this model
+          </Button>
+        </div>
       </div>
 
+      <PlaygroundDrawer
+        open={playgroundOpen}
+        onOpenChange={setPlaygroundOpen}
+        modelSlug={model.slug}
+        modelName={model.name}
+        vendor={model.vendor}
+      />
       <TryModelDrawer
         open={tryOpen}
         onOpenChange={setTryOpen}

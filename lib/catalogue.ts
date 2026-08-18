@@ -131,5 +131,10 @@ export function formatPerMillion(micros: number) {
 }
 
 export function formatContext(limit: number) {
+  if (limit >= 1_000_000) {
+    const millions = limit / 1_000_000;
+    const label = Number.isInteger(millions) ? String(millions) : millions.toFixed(1).replace(/\.0$/, "");
+    return `${label}M`;
+  }
   return `${Math.round(limit / 1000)}k`;
 }
