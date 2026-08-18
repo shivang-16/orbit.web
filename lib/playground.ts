@@ -1,9 +1,14 @@
 import { getStoredOrganizationId } from "@/lib/api";
 
+const PLAYGROUND_STORAGE_PREFIX = "orbit.playground.v1";
+const MAX_STORED_MESSAGES = 60;
+
 export type PlaygroundMessage = {
   role: "user" | "assistant";
   content: string;
 };
+
+export type PlaygroundStoredMessage = PlaygroundMessage & { id: string };
 
 export class PlaygroundError extends Error {
   status: number;
@@ -13,6 +18,61 @@ export class PlaygroundError extends Error {
     this.name = "PlaygroundError";
     this.status = status;
   }
+}
+
+function playgroundStorageKey(modelSlug: string) {
+  const orgId = getStoredOrganizationId() || "none";
+  return `${PLAYGROUND_STORAGE_PREFIX}:${orgId}:${modelSlug}`;
+}
+
+function persistableMessages(messages: PlaygroundStoredMessage[]) {
+  return messages
+    .filter((item) => item.role === "user" || item.content.trim() !== "")
+    .slice(-MAX_STORED_MESSAGES);
+}
+
+export function loadPlaygroundThread(modelSlug: string): PlaygroundStoredMessage[] {
+  if (typeof window === "undefined" || !modelSlug) return [];
+  try {
+    const raw = window.localStorage.getItem(playgroundStorageKey(modelSlug));
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    const messages: PlaygroundStoredMessage[] = [];
+    for (const item of parsed) {
+      if (!item || typeof item !== "object") continue;
+      const row = item as Partial<PlaygroundStoredMessage>;
+      if (row.role !== "user" && row.role !== "assistant") continue;
+      if (typeof row.content !== "string") continue;
+      messages.push({
+        id: typeof row.id === "string" && row.id ? row.id : crypto.randomUUID(),
+        role: row.role,
+        content: row.content,
+      });
+    }
+    return persistableMessages(messages);
+  } catch {
+    return [];
+  }
+}
+
+export function savePlaygroundThread(modelSlug: string, messages: PlaygroundStoredMessage[]) {
+  if (typeof window === "undefined" || !modelSlug) return;
+  const next = persistableMessages(messages);
+  try {
+    if (next.length === 0) {
+      window.localStorage.removeItem(playgroundStorageKey(modelSlug));
+      return;
+    }
+    window.localStorage.setItem(playgroundStorageKey(modelSlug), JSON.stringify(next));
+  } catch {
+    // quota / private mode
+  }
+}
+
+export function clearPlaygroundThread(modelSlug: string) {
+  if (typeof window === "undefined" || !modelSlug) return;
+  window.localStorage.removeItem(playgroundStorageKey(modelSlug));
 }
 
 export async function streamPlaygroundChat(

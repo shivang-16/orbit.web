@@ -18,20 +18,21 @@ import { Dialog } from "radix-ui";
 
 import { VendorLogo } from "@/components/models/vendor-logo";
 import { Button } from "@/components/ui/button";
-import { PlaygroundError, streamPlaygroundChat, type PlaygroundMessage } from "@/lib/playground";
+import {
+  clearPlaygroundThread,
+  loadPlaygroundThread,
+  PlaygroundError,
+  savePlaygroundThread,
+  streamPlaygroundChat,
+  type PlaygroundStoredMessage,
+} from "@/lib/playground";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_WIDTH = 480;
 const MIN_WIDTH = 380;
 const MAX_WIDTH_RATIO = 0.85;
 
-const SUGGESTIONS = [
-  "Explain this model like I'm new to LLMs.",
-  "Write a short TypeScript retry helper.",
-  "What's the difference between latency and throughput?",
-];
-
-type ChatItem = PlaygroundMessage & { id: string };
+type ChatItem = PlaygroundStoredMessage;
 
 export function PlaygroundDrawer({
   open,
@@ -55,6 +56,7 @@ export function PlaygroundDrawer({
   const abortRef = useRef<AbortController | null>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const skipSaveRef = useRef(true);
 
   const clampWidth = useCallback((next: number) => {
     const max = Math.max(MIN_WIDTH, Math.round(window.innerWidth * MAX_WIDTH_RATIO));
@@ -86,6 +88,20 @@ export function PlaygroundDrawer({
   }, [messages, streaming]);
 
   useEffect(() => {
+    skipSaveRef.current = true;
+    setMessages(loadPlaygroundThread(modelSlug));
+    setError(null);
+  }, [modelSlug]);
+
+  useEffect(() => {
+    if (skipSaveRef.current) {
+      skipSaveRef.current = false;
+      return;
+    }
+    savePlaygroundThread(modelSlug, messages);
+  }, [modelSlug, messages]);
+
+  useEffect(() => {
     if (open) {
       textareaRef.current?.focus();
       return;
@@ -93,9 +109,6 @@ export function PlaygroundDrawer({
     abortRef.current?.abort();
     abortRef.current = null;
     setStreaming(false);
-    setMessages([]);
-    setInput("");
-    setError(null);
   }, [open]);
 
   async function send(text: string) {
@@ -153,6 +166,18 @@ export function PlaygroundDrawer({
       setStreaming(false);
       textareaRef.current?.focus();
     }
+  }
+
+  function newChat() {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    skipSaveRef.current = true;
+    clearPlaygroundThread(modelSlug);
+    setMessages([]);
+    setInput("");
+    setError(null);
+    setStreaming(false);
+    textareaRef.current?.focus();
   }
 
   function stop() {
@@ -213,11 +238,24 @@ export function PlaygroundDrawer({
                 {modelName}
               </Dialog.Description>
             </div>
-            <Dialog.Close asChild>
-              <Button type="button" variant="ghost" size="icon-xs" className="shrink-0 text-zinc-400">
-                <XIcon size={16} />
-              </Button>
-            </Dialog.Close>
+            <div className="flex shrink-0 items-center gap-1">
+              {messages.length > 0 ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={newChat}
+                  className="h-7 px-2 text-[12px] text-zinc-400 hover:text-white"
+                >
+                  New chat
+                </Button>
+              ) : null}
+              <Dialog.Close asChild>
+                <Button type="button" variant="ghost" size="icon-xs" className="shrink-0 text-zinc-400">
+                  <XIcon size={16} />
+                </Button>
+              </Dialog.Close>
+            </div>
           </div>
 
           <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
@@ -289,21 +327,6 @@ export function PlaygroundDrawer({
                 )}
               </div>
             </form>
-
-            {messages.length === 0 ? (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {SUGGESTIONS.map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    type="button"
-                    onClick={() => void send(suggestion)}
-                    className="rounded-full border border-white/10 px-2.5 py-1 text-left text-[12px] text-zinc-400 transition-colors hover:border-white/20 hover:text-zinc-200"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            ) : null}
 
             <p className="mt-3 text-center text-[11px] text-zinc-500">
               Responses are AI-generated. Verify before relying on them.
