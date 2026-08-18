@@ -24,7 +24,7 @@ export function CatalogueTableView({ models }: { models: CatalogueModel[] }) {
           {models.map((model) => (
             <tr key={model.id} className="border-b border-white/5 last:border-b-0 hover:bg-white/[0.03]">
               <td className="px-4 py-3">
-                <Link href={`/dashboard/models/${model.id}`} className="block">
+                <Link href={`/models/${model.id}`} className="block">
                   <ModelIdentity name={model.name} vendor={model.vendor} />
                 </Link>
               </td>

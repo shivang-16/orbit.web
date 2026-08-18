@@ -23,7 +23,7 @@ export function ModelTable({
           <p className="mt-1 text-xs text-zinc-400">{description}</p>
         </div>
         <Link
-          href={`/dashboard/models?tag=${tag}`}
+          href={`/models?tag=${tag}`}
           className="shrink-0 text-[13px] text-zinc-300 underline-offset-4 transition-colors hover:text-white hover:underline"
         >
           View more
@@ -41,7 +41,7 @@ export function ModelTable({
           {models.map((model, index) => (
             <li key={model.id} className="border-b border-white/5 last:border-b-0">
               <Link
-                href={`/dashboard/models/${model.id}`}
+                href={`/models/${model.id}`}
                 className="grid grid-cols-[1.25rem_minmax(0,1fr)_4rem_5.5rem] items-center gap-3 py-3 transition-colors hover:bg-white/[0.03]"
               >
                 <span className="text-[13px] text-zinc-400">{index + 1}</span>

@@ -14,7 +14,7 @@ export function OverviewHeader({ total }: { total: number }) {
         </p>
       </div>
       <Button asChild variant="outline" className="shrink-0">
-        <Link href="/dashboard/models">Browse all {total} models</Link>
+        <Link href="/models">Browse all {total} models</Link>
       </Button>
     </div>
   );

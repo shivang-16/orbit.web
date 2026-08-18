@@ -34,7 +34,7 @@ export function LoadCreditsButton() {
 
   return (
     <Button asChild variant="outline" size="lg" className="px-3">
-      <Link href="/pricing">
+      <Link href="/billing/credits">
         <WalletIcon size={14} className="text-zinc-300" />
         <span className="text-zinc-300">Load credits</span>
         <span className="h-3.5 w-px bg-white/20" />

@@ -29,7 +29,7 @@ export function FrontierCard({ models }: { models: CatalogueModel[] }) {
           {models.map((model, index) => (
             <li key={model.id} className="border-b border-white/5 last:border-b-0">
               <Link
-                href={`/dashboard/models/${model.id}`}
+                href={`/models/${model.id}`}
                 className="flex items-center gap-4 py-3 transition-colors hover:bg-white/[0.03]"
               >
                 <span className="w-3 text-[13px] text-zinc-400">{index + 1}</span>

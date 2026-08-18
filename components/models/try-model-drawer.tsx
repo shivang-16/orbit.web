@@ -119,7 +119,7 @@ export function TryModelDrawer({
                 Create an API key from your Orbit dashboard and set it as an environment variable.
               </p>
               <Button asChild className="mt-3">
-                <Link href="/dashboard/api-keys" target="_blank">
+                <Link href="/api-keys" target="_blank">
                   Create API key
                   <ArrowSquareOutIcon size={13} data-icon="inline-end" />
                 </Link>

@@ -49,7 +49,7 @@ function HighlightCard({
 
       {model ? (
         <>
-          <Link href={`/dashboard/models/${model.id}`} className="mt-3 block hover:underline">
+          <Link href={`/models/${model.id}`} className="mt-3 block hover:underline">
             <ModelIdentity name={model.name} vendor={model.vendor} showVendor={false} />
           </Link>
           <p className="mt-3 flex items-baseline gap-1.5">
@@ -61,7 +61,7 @@ function HighlightCard({
             </span>
           </p>
           <Link
-            href={`/dashboard/models?tag=${tag}`}
+            href={`/models?tag=${tag}`}
             className="mt-2 inline-block text-xs text-zinc-400 transition-colors hover:text-zinc-300"
           >
             {formatContext(model.input_context_limit)} context · view {tagLabel(tag).toLowerCase()}

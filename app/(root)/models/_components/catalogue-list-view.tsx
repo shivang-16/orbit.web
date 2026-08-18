@@ -19,7 +19,7 @@ export function CatalogueListView({ models }: { models: CatalogueModel[] }) {
         return (
           <li key={model.id}>
             <Link
-              href={`/dashboard/models/${model.id}`}
+              href={`/models/${model.id}`}
               className="flex items-start gap-3 px-4 py-4 transition-colors hover:bg-white/[0.03]"
             >
               <VendorLogo vendor={model.vendor} className="mt-0.5 size-6" />

@@ -12,7 +12,7 @@ export function TagBrowser({ tags }: { tags: CatalogueTagSummary[] }) {
       <div className="flex items-end justify-between gap-4">
         <h2 className="text-[13px] text-zinc-300">Browse by tag</h2>
         <Link
-          href="/dashboard/models"
+          href="/models"
           className="text-[13px] text-zinc-300 underline-offset-4 transition-colors hover:text-white hover:underline"
         >
           View all tags
@@ -23,7 +23,7 @@ export function TagBrowser({ tags }: { tags: CatalogueTagSummary[] }) {
         {featured.map((item) => (
           <Link
             key={item.tag}
-            href={`/dashboard/models?tag=${item.tag}`}
+            href={`/models?tag=${item.tag}`}
             className="rounded-xl border border-white/10 bg-[#0b0b0c] p-4 transition-colors hover:border-white/20"
           >
             <div className="flex items-center gap-1.5 text-[13px] text-white">

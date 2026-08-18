@@ -25,17 +25,17 @@ type NavGroup = {
 
 const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
   { label: "Overview", href: "/dashboard", icon: SquaresFourIcon },
-  { label: "Model Catalogue", href: "/dashboard/models", icon: StackIcon },
-  { label: "API Keys", href: "/dashboard/api-keys", icon: KeyIcon },
+  { label: "Model Catalogue", href: "/models", icon: StackIcon },
+  { label: "API Keys", href: "/api-keys", icon: KeyIcon },
   {
     label: "Billing",
     icon: CreditCardIcon,
     children: [
-      { label: "Credits", href: "/dashboard/billing/credits" },
-      { label: "Invoices", href: "/dashboard/billing/invoices" },
+      { label: "Credits", href: "/billing/credits" },
+      { label: "Invoices", href: "/billing/invoices" },
     ],
   },
-  { label: "Documentation", href: "/dashboard/docs", icon: BookOpenTextIcon },
+  { label: "Documentation", href: "/docs", icon: BookOpenTextIcon },
 ];
 
 function isGroup(item: NavLeaf | NavGroup): item is NavGroup {
@@ -77,7 +77,10 @@ export function DashboardSidebar() {
 }
 
 function LeafLink({ item, pathname }: { item: NavLeaf; pathname: string }) {
-  const active = pathname === item.href;
+  const active =
+    item.href === "/dashboard"
+      ? pathname === "/dashboard"
+      : pathname === item.href || pathname.startsWith(`${item.href}/`);
   const ItemIcon = item.icon;
   return (
     <Link

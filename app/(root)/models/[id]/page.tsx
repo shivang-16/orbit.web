@@ -50,7 +50,7 @@ export default function ModelDetailPage() {
   return (
     <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
       <Link
-        href="/dashboard/models"
+        href="/models"
         className="inline-flex items-center gap-1.5 text-[13px] text-zinc-400 transition-colors hover:text-white"
       >
         <ArrowLeftIcon size={14} />
