@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       { source: "/dashboard/billing/:path*", destination: "/billing/:path*", permanent: false },
       { source: "/dashboard/docs", destination: "/docs", permanent: false },
       { source: "/dashboard/docs/:path*", destination: "/docs/:path*", permanent: false },
+      { source: "/billing/usage", destination: "/usage", permanent: false },
     ];
   },
 };

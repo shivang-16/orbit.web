@@ -12,9 +12,11 @@ export type CreditHistoryEntry = {
   id: string;
   entry_type: string;
   type_label: string;
-  description: string;
+  model_name: string;
+  input_tokens: number;
+  output_tokens: number;
+  latency_ms: number;
   amount_micros: number;
-  idempotency_key: string;
   created_at: string;
 };
 
@@ -32,7 +34,7 @@ export function fetchCreditHistory() {
 }
 
 export function formatCreditDollars(micros: number) {
-  // Header / summary balances stay at cents. Truncate leftover micros so
+  // Header badge stays at cents. Truncate leftover micros so
   // $99.996988 displays as $99.99, not rounded up to $100.00.
   const cents = Math.trunc(micros / 10_000) / 100;
   return cents.toLocaleString("en-US", {
@@ -41,6 +43,14 @@ export function formatCreditDollars(micros: number) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+}
+
+// Exact ledger amount in dollars. Whole cents stay at 2 digits; anything
+// smaller than a cent uses 6 digits so $99.996988 is not shown as $99.99.
+export function formatExactCreditDollars(micros: number) {
+  const absMicros = Math.abs(Math.trunc(micros));
+  const fractionDigits = absMicros % 10_000 === 0 ? 2 : 6;
+  return formatDollars(micros, fractionDigits);
 }
 
 // History rows keep micros-level precision so a $0.000090 usage line
@@ -75,4 +85,10 @@ export function formatCreditDate(value: string) {
     minute: "2-digit",
     hour12: false,
   });
+}
+
+export function formatLatency(ms: number) {
+  if (ms <= 0) return "—";
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(2)}s`;
 }

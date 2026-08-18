@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   BookOpenTextIcon,
   CaretDownIcon,
+  ChartLineIcon,
   CreditCardIcon,
   KeyIcon,
   SquaresFourIcon,
@@ -27,6 +28,7 @@ const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
   { label: "Overview", href: "/dashboard", icon: SquaresFourIcon },
   { label: "Model Catalogue", href: "/models", icon: StackIcon },
   { label: "API Keys", href: "/api-keys", icon: KeyIcon },
+  { label: "Usage", href: "/usage", icon: ChartLineIcon },
   {
     label: "Billing",
     icon: CreditCardIcon,
