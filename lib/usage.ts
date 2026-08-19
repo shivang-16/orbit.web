@@ -44,10 +44,21 @@ export type UsageResponse = {
   cost_micros: number;
   series: UsageDay[];
   requests: UsageRequest[];
+  requests_page: number;
+  requests_limit: number;
+  requests_total: number;
 };
 
-export function fetchUsage(range: UsageRangePreset) {
-  return apiFetch(`/usage?range=${encodeURIComponent(range)}`) as Promise<UsageResponse>;
+export const USAGE_PAGE_SIZES = [25, 50, 75] as const;
+export const DEFAULT_USAGE_PAGE_SIZE = 25;
+
+export function fetchUsage(range: UsageRangePreset, page = 1, limit = DEFAULT_USAGE_PAGE_SIZE) {
+  const params = new URLSearchParams({
+    range,
+    page: String(page),
+    limit: String(limit),
+  });
+  return apiFetch(`/usage?${params.toString()}`) as Promise<UsageResponse>;
 }
 
 export function formatTokenCount(value: number) {

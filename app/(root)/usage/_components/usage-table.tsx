@@ -1,9 +1,27 @@
 "use client";
 
-import { formatCreditDate, formatLatency, formatSignedCreditDollars } from "@/lib/credits";
-import type { UsageRequest } from "@/lib/usage";
+import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react";
+import { DropdownMenu } from "radix-ui";
 
-export function UsageTable({ requests }: { requests: UsageRequest[] }) {
+import { formatCreditDate, formatLatency, formatSignedCreditDollars } from "@/lib/credits";
+import { USAGE_PAGE_SIZES, type UsageRequest } from "@/lib/usage";
+import { cn } from "@/lib/utils";
+
+export function UsageTable({
+  requests,
+  page,
+  limit,
+  total,
+  onPageChange,
+  onLimitChange,
+}: {
+  requests: UsageRequest[];
+  page: number;
+  limit: number;
+  total: number;
+  onPageChange: (page: number) => void;
+  onLimitChange: (limit: number) => void;
+}) {
   return (
     <section className="mt-6 rounded-xl border border-white/10 bg-[#0b0b0c]">
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
@@ -69,7 +87,104 @@ export function UsageTable({ requests }: { requests: UsageRequest[] }) {
           </tbody>
         </table>
       </div>
+      <UsagePagination
+        page={page}
+        limit={limit}
+        total={total}
+        onPageChange={onPageChange}
+        onLimitChange={onLimitChange}
+      />
     </section>
+  );
+}
+
+function UsagePagination({
+  page,
+  limit,
+  total,
+  onPageChange,
+  onLimitChange,
+}: {
+  page: number;
+  limit: number;
+  total: number;
+  onPageChange: (page: number) => void;
+  onLimitChange: (limit: number) => void;
+}) {
+  const pageCount = Math.max(1, Math.ceil(total / limit));
+  const from = total === 0 ? 0 : (page - 1) * limit + 1;
+  const to = Math.min(page * limit, total);
+  const atStart = page <= 1;
+  const atEnd = page >= pageCount;
+
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-3">
+      <div className="flex flex-wrap items-center gap-3 text-[13px] text-zinc-400">
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-[13px] text-zinc-200 transition-colors hover:bg-white/5"
+            >
+              Rows: {limit}
+              <CaretDownIcon size={12} className="text-zinc-500" />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              align="start"
+              sideOffset={6}
+              className="z-50 min-w-[5.5rem] rounded-lg border border-white/10 bg-zinc-950 p-1 shadow-xl"
+            >
+              {USAGE_PAGE_SIZES.map((size) => (
+                <DropdownMenu.Item
+                  key={size}
+                  onSelect={() => onLimitChange(size)}
+                  className="flex cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
+                >
+                  {size}
+                  {size === limit ? <CheckIcon size={12} className="text-zinc-300" /> : null}
+                </DropdownMenu.Item>
+              ))}
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+        <span>
+          {total === 0 ? "Showing 0 of 0" : `Showing ${from}-${to} of ${total}`}
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={atStart}
+          onClick={() => onPageChange(page - 1)}
+          className={cn(
+            "rounded-md border border-white/10 px-2.5 py-1 text-[13px] transition-colors",
+            atStart
+              ? "cursor-not-allowed text-zinc-600"
+              : "text-zinc-200 hover:bg-white/5 hover:text-white"
+          )}
+        >
+          Prev
+        </button>
+        <span className="min-w-12 text-center text-[13px] text-zinc-300">
+          {page} / {pageCount}
+        </span>
+        <button
+          type="button"
+          disabled={atEnd}
+          onClick={() => onPageChange(page + 1)}
+          className={cn(
+            "rounded-md border border-white/10 px-2.5 py-1 text-[13px] transition-colors",
+            atEnd
+              ? "cursor-not-allowed text-zinc-600"
+              : "text-zinc-200 hover:bg-white/5 hover:text-white"
+          )}
+        >
+          Next
+        </button>
+      </div>
+    </div>
   );
 }
 

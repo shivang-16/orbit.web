@@ -7,6 +7,7 @@ import { Loader } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { formatSignedCreditDollars } from "@/lib/credits";
 import {
+  DEFAULT_USAGE_PAGE_SIZE,
   USAGE_RANGE_PRESETS,
   fetchUsage,
   formatTokenCount,
@@ -21,6 +22,8 @@ import { UsageTable } from "./usage-table";
 export function UsagePage() {
   const { activeOrganization } = useOrg();
   const [range, setRange] = useState<UsageRangePreset>("7d");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(DEFAULT_USAGE_PAGE_SIZE);
   const [data, setData] = useState<UsageResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,12 +34,13 @@ export function UsagePage() {
     }
 
     let cancelled = false;
-    setData(null);
-    setError(null);
 
-    fetchUsage(range)
+    fetchUsage(range, page, limit)
       .then((next) => {
-        if (!cancelled) setData(next);
+        if (!cancelled) {
+          setData(next);
+          setError(null);
+        }
       })
       .catch(() => {
         if (!cancelled) setError("Could not load usage.");
@@ -45,7 +49,18 @@ export function UsagePage() {
     return () => {
       cancelled = true;
     };
-  }, [activeOrganization, range]);
+  }, [activeOrganization, range, page, limit]);
+
+  function onRangeChange(next: UsageRangePreset) {
+    setRange(next);
+    setPage(1);
+    setData(null);
+  }
+
+  function onLimitChange(next: number) {
+    setLimit(next);
+    setPage(1);
+  }
 
   return (
     <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
@@ -64,7 +79,7 @@ export function UsagePage() {
             <button
               key={preset.id}
               type="button"
-              onClick={() => setRange(preset.id)}
+              onClick={() => onRangeChange(preset.id)}
               className={cn(
                 "rounded-md px-2.5 py-1 text-[12px] transition-colors",
                 range === preset.id
@@ -93,7 +108,14 @@ export function UsagePage() {
           </div>
 
           <UsageChart series={data.series} />
-          <UsageTable requests={data.requests} />
+          <UsageTable
+            requests={data.requests}
+            page={data.requests_page}
+            limit={data.requests_limit}
+            total={data.requests_total}
+            onPageChange={setPage}
+            onLimitChange={onLimitChange}
+          />
         </>
       )}
     </div>
