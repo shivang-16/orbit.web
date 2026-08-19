@@ -29,6 +29,7 @@ const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
   { label: "Overview", href: "/dashboard", icon: SquaresFourIcon },
   { label: "Model Catalogue", href: "/models", icon: StackIcon },
   { label: "Playground", href: "/playground", icon: ChatCircleIcon },
+  // { label: "SDK Test", href: "/sdk-test", icon: FlaskIcon },
   { label: "Usage", href: "/usage", icon: ChartLineIcon },
   { label: "API Keys", href: "/api-keys", icon: KeyIcon },
   {
