@@ -73,7 +73,7 @@ export function ModelCallout() {
     <>
       <span
         aria-hidden
-        className="pointer-events-none absolute z-10 transition-all duration-[1200ms] ease-in-out"
+        className="pointer-events-none absolute z-10 hidden transition-all duration-[1200ms] ease-in-out md:block"
         style={{
           left: `${route.anchor.left}%`,
           top: `${route.anchor.top}%`,
@@ -85,13 +85,14 @@ export function ModelCallout() {
       </span>
 
       <div
-        className="pointer-events-none absolute z-20 w-[336px] max-w-[calc(100%-1.5rem)] transition-all duration-[1200ms] ease-in-out"
-        style={{
-          left: `${route.anchor.left}%`,
-          top: `${route.anchor.top}%`,
-          transform: "translate(-50%, 18px)",
-          opacity: visible ? 1 : 0,
-        }}
+        className="pointer-events-none absolute z-20 w-[min(336px,calc(100%-1.5rem))] bottom-5 left-1/2 top-auto -translate-x-1/2 translate-y-0 transition-all duration-[1200ms] ease-in-out md:bottom-auto md:left-[var(--callout-left)] md:top-[var(--callout-top)] md:translate-y-[18px]"
+        style={
+          {
+            "--callout-left": `${route.anchor.left}%`,
+            "--callout-top": `${route.anchor.top}%`,
+            opacity: visible ? 1 : 0,
+          } as React.CSSProperties
+        }
       >
         <div className="rounded-xl border border-white/10 bg-black/90 px-4 py-3 shadow-2xl backdrop-blur-sm">
           <p className="text-[11.5px] text-zinc-500">{route.vendorLabel}</p>

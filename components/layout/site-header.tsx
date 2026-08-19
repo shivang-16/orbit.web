@@ -2,6 +2,7 @@ import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { AuthControls } from "@/components/layout/auth-controls";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { ASK_AI_QUERY } from "@/lib/ask-ai";
 
 const NAV_ITEMS = [
@@ -15,7 +16,7 @@ const NAV_ITEMS = [
 export function SiteHeader() {
   return (
     <header className="sticky inset-x-0 top-0 z-50 border-b border-white/6 bg-black/70 backdrop-blur-md backdrop-saturate-150">
-      <div className="relative flex h-16 items-center justify-between px-8 lg:px-10 xl:px-12">
+      <div className="relative flex h-14 items-center justify-between px-4 sm:h-16 sm:px-6 lg:px-10 xl:px-12">
         <Link
           href="/"
           className="font-mono text-[15px] font-medium tracking-tight text-white"
@@ -38,7 +39,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <a
             href="https://discord.gg/tryorbit"
             target="_blank"
@@ -65,6 +66,7 @@ export function SiteHeader() {
             />
           </a>
           <AuthControls />
+          <MobileNav items={NAV_ITEMS} />
         </div>
       </div>
     </header>

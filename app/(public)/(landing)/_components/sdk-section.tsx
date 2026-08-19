@@ -154,10 +154,10 @@ export function SdkSection() {
   }
 
   return (
-    <section className="relative bg-black px-8 py-24 lg:px-10 lg:py-28 xl:px-12">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] lg:gap-20">
+    <section className="relative bg-black px-4 py-16 sm:px-6 sm:py-24 lg:px-10 lg:py-28 xl:px-12">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] lg:gap-20">
         <div>
-          <h2 className="max-w-md text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.1] font-normal tracking-[-0.035em]">
+          <h2 className="max-w-md text-[clamp(1.75rem,6vw,2.5rem)] leading-[1.1] font-normal tracking-[-0.035em] lg:text-[clamp(1.75rem,3vw,2.5rem)]">
             <span className="text-white">No migration. No new SDK.</span>{" "}
             <span className="text-zinc-500">
               Point the client you already use at Orbit.
@@ -197,11 +197,11 @@ export function SdkSection() {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative min-w-0">
           <GridBackdrop />
 
-          <div className="relative">
-            <div className="inline-flex items-center gap-1 rounded-xl bg-white/[0.04] p-1">
+          <div className="relative min-w-0">
+            <div className="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-xl bg-white/[0.04] p-1">
               {SDKS.map((item) => (
                 <button
                   key={item.key}
@@ -209,7 +209,7 @@ export function SdkSection() {
                   onClick={() => setSdk(item.key)}
                   aria-pressed={sdk === item.key}
                   className={cn(
-                    "rounded-lg px-3.5 py-2 text-[13px] font-medium transition-colors",
+                    "shrink-0 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors sm:px-3.5",
                     sdk === item.key
                       ? "bg-[#18181b] text-white shadow-sm"
                       : "text-zinc-500 hover:text-zinc-300"
@@ -220,16 +220,16 @@ export function SdkSection() {
               ))}
             </div>
 
-            <div className="mt-3 overflow-hidden rounded-2xl bg-[#09090b]/80 backdrop-blur-sm">
-              <div className="flex items-center justify-between px-3 pt-3">
-                <div className="flex items-center gap-1">
+            <div className="mt-3 min-w-0 overflow-hidden rounded-2xl bg-[#09090b]/80 backdrop-blur-sm">
+              <div className="flex items-center justify-between gap-2 px-2 pt-3 sm:px-3">
+                <div className="flex min-w-0 items-center gap-1 overflow-x-auto">
                   {LANGUAGES.map((item) => (
                     <button
                       key={item.key}
                       type="button"
                       onClick={() => setLanguage(item.key)}
                       className={cn(
-                        "rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors",
+                        "shrink-0 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors",
                         language === item.key
                           ? "bg-white/[0.07] text-white"
                           : "text-zinc-500 hover:text-zinc-300"
@@ -253,7 +253,7 @@ export function SdkSection() {
                 </button>
               </div>
 
-              <pre className="overflow-x-auto px-5 py-6 font-mono text-[12.5px] leading-[1.85] whitespace-pre">
+              <pre className="overflow-x-auto px-4 py-5 font-mono text-[11.5px] leading-[1.85] whitespace-pre sm:px-5 sm:py-6 sm:text-[12.5px]">
                 <code>
                   <Highlighted code={before} />
                   <span className="text-emerald-300">{typedModel}</span>
@@ -274,7 +274,7 @@ function GridBackdrop() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute -inset-x-10 -inset-y-12 -z-10"
+      className="pointer-events-none absolute -inset-x-4 -inset-y-8 -z-10 sm:-inset-x-10 sm:-inset-y-12"
       style={{
         backgroundImage:
           "linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px)",

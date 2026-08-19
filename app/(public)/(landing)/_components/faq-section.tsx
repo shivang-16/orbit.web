@@ -54,13 +54,13 @@ export function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative bg-black px-8 py-24 lg:px-10 lg:py-28 xl:px-12">
+    <section className="relative bg-black px-4 py-16 sm:px-6 sm:py-24 lg:px-10 lg:py-28 xl:px-12">
       <div className="mx-auto max-w-6xl">
-        <h2 className="text-[clamp(3rem,8vw,5.5rem)] leading-[0.95] font-bold tracking-tight text-white">
+        <h2 className="text-[clamp(2.5rem,12vw,5.5rem)] leading-[0.95] font-bold tracking-tight text-white">
           FAQ
         </h2>
 
-        <div className="mt-10 border-t border-white/10">
+        <div className="mt-8 border-t border-white/10 sm:mt-10">
           {FAQS.map((item, index) => {
             const expanded = open === index;
 
@@ -70,18 +70,18 @@ export function FaqSection() {
                   type="button"
                   onClick={() => setOpen(expanded ? null : index)}
                   aria-expanded={expanded}
-                  className="flex w-full items-start gap-5 py-6 text-left"
+                  className="flex w-full items-start gap-3 py-4 text-left sm:gap-5 sm:py-6"
                 >
                   <span
                     className={cn(
-                      "mt-1 shrink-0 font-mono text-[13px] tabular-nums transition-colors",
+                      "mt-1 shrink-0 font-mono text-[12px] tabular-nums transition-colors sm:text-[13px]",
                       expanded ? "text-emerald-400" : "text-zinc-600"
                     )}
                   >
                     ({String(index + 1).padStart(3, "0")})
                   </span>
 
-                  <span className="flex-1 text-[17px] leading-snug font-medium text-white sm:text-[19px]">
+                  <span className="flex-1 text-[15px] leading-snug font-medium text-white sm:text-[17px] md:text-[19px]">
                     {item.question}
                   </span>
 
@@ -110,7 +110,7 @@ export function FaqSection() {
                   )}
                 >
                   <div className="min-h-0">
-                    <div className="max-w-2xl pb-6 pl-[52px] sm:pl-[56px]">
+                    <div className="max-w-2xl pb-5 pl-11 sm:pb-6 sm:pl-[56px]">
                       <p className="text-[14px] leading-relaxed text-zinc-400">
                         {item.answer}
                       </p>

@@ -6,8 +6,10 @@ export default function LandingLayout({ children }: LayoutProps<"/">) {
   return (
     <>
       <SiteHeader />
-      {children}
-      <Footer />
+      <div className="overflow-x-clip">
+        {children}
+        <Footer />
+      </div>
     </>
   );
 }

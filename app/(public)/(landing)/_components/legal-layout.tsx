@@ -16,9 +16,9 @@ export function LegalLayout({ title, lastUpdated, children }: Props) {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-3xl px-6 py-10 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10 lg:px-10">
         <p className="mb-3 text-[12px] text-white/35">Last updated: {lastUpdated}</p>
-        <h1 className="mb-8 text-[32px] font-bold tracking-tight text-white sm:text-[38px]">
+        <h1 className="mb-8 text-[28px] font-bold tracking-tight text-white sm:text-[38px]">
           {title}
         </h1>
 

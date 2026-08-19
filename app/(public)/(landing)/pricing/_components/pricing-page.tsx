@@ -30,9 +30,9 @@ export function PricingPage() {
   }, []);
 
   return (
-    <main className="flex-1 bg-black px-6 pt-28 pb-20 lg:px-10">
+    <main className="flex-1 bg-black px-4 pt-24 pb-16 sm:px-6 sm:pt-28 sm:pb-20 lg:px-10">
       <div className="mx-auto max-w-[1280px]">
-        <h1 className="text-center text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95] font-normal tracking-[-0.045em] text-white">
+        <h1 className="text-center text-[clamp(2rem,8vw,4.5rem)] leading-[0.95] font-normal tracking-[-0.045em] text-white">
           Plans that grow with you
         </h1>
 
@@ -44,7 +44,7 @@ export function PricingPage() {
           </div>
         ) : (
           <>
-            <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 md:grid-cols-2 xl:grid-cols-4">
               {plans.map((plan, index) => (
                 <PlanCard key={plan.id} plan={plan} outlined={index === 0} />
               ))}
@@ -73,17 +73,17 @@ function PlanCard({ plan, outlined }: { plan: Plan; outlined: boolean }) {
         plan.highlighted ? "border-white/25" : "border-white/10"
       }`}
     >
-      <div className="flex flex-1 flex-col px-7 pt-8 pb-6">
+      <div className="flex flex-1 flex-col px-5 pt-7 pb-5 sm:px-7 sm:pt-8 sm:pb-6">
         <PlanIcon slug={plan.slug} />
-        <h2 className="mt-6 text-[2rem] leading-none font-semibold tracking-tight text-white">
+        <h2 className="mt-6 text-[1.75rem] leading-none font-semibold tracking-tight text-white sm:text-[2rem]">
           {plan.name}
         </h2>
-        <p className="mt-3 min-h-10 text-[15px] leading-snug text-zinc-400">
+        <p className="mt-3 min-h-0 text-[15px] leading-snug text-zinc-400 sm:min-h-10">
           {plan.tagline}
         </p>
 
         <div className="mt-8 flex flex-wrap items-end gap-x-2 gap-y-1">
-          <span className="text-[3.25rem] leading-none font-medium tracking-tight text-white">
+          <span className="text-[2.75rem] leading-none font-medium tracking-tight text-white sm:text-[3.25rem]">
             ${price}
           </span>
           <span className="mb-1.5 text-sm text-zinc-400">
@@ -97,7 +97,7 @@ function PlanCard({ plan, outlined }: { plan: Plan; outlined: boolean }) {
         <PlanCTA plan={plan} outlined={outlined} />
       </div>
 
-      <div className="border-t border-white/10 px-7 py-6">
+      <div className="border-t border-white/10 px-5 py-5 sm:px-7 sm:py-6">
         {plan.includes_from ? (
           <p className="mb-3 text-[15px] text-zinc-300">
             Everything in {plan.includes_from}, plus:
@@ -166,11 +166,11 @@ function PlanCTA({ plan, outlined }: { plan: Plan; outlined: boolean }) {
 
 function CustomPlanRow() {
   return (
-    <article className="mt-4 flex flex-col items-start justify-between gap-6 rounded-[28px] border border-white/10 bg-[#161616] px-8 py-8 sm:flex-row sm:items-center">
-      <div className="flex items-start gap-5">
+    <article className="mt-4 flex flex-col items-start justify-between gap-6 rounded-[28px] border border-white/10 bg-[#161616] px-5 py-6 sm:px-8 sm:py-8 sm:flex-row sm:items-center">
+      <div className="flex items-start gap-4 sm:gap-5">
         <PlanIcon slug="business" />
         <div>
-          <h2 className="text-[2rem] leading-none font-semibold tracking-tight text-white">
+          <h2 className="text-[1.75rem] leading-none font-semibold tracking-tight text-white sm:text-[2rem]">
             Custom
           </h2>
           <p className="mt-3 max-w-xl text-[15px] leading-snug text-zinc-400">
@@ -179,7 +179,7 @@ function CustomPlanRow() {
           </p>
         </div>
       </div>
-      <Button asChild className="h-12 shrink-0 rounded-xl px-6 text-sm">
+      <Button asChild className="h-12 w-full shrink-0 rounded-xl px-6 text-sm sm:w-auto">
         <a href="mailto:hello@tryorbit.cloud">Talk to us</a>
       </Button>
     </article>

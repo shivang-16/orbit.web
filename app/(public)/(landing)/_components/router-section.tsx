@@ -17,9 +17,9 @@ const STATS = [
 
 export function RouterSection() {
   return (
-    <section className="relative bg-black px-8 py-24 lg:px-10 lg:py-28 xl:px-12">
+    <section className="relative bg-black px-4 py-16 sm:px-6 sm:py-24 lg:px-10 lg:py-28 xl:px-12">
       <div className="mx-auto max-w-6xl">
-        <h2 className="max-w-2xl text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.1] font-normal tracking-[-0.035em]">
+        <h2 className="max-w-2xl text-[clamp(1.75rem,6vw,2.5rem)] leading-[1.1] font-normal tracking-[-0.035em] lg:text-[clamp(1.75rem,3vw,2.5rem)]">
           <span className="text-white">
             An intelligent router before every request.
           </span>{" "}
@@ -28,26 +28,26 @@ export function RouterSection() {
           </span>
         </h2>
 
-        <div className="relative mt-12 overflow-hidden rounded-2xl bg-[#09090b]">
-          <div className="flex items-center justify-between px-5 py-3.5">
-            <p className="text-[12.5px] text-zinc-500">Routing</p>
-            <p className="font-mono text-[12px] text-zinc-600">
+        <div className="relative mt-8 overflow-hidden rounded-2xl bg-[#09090b] sm:mt-12">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-3.5">
+            <p className="shrink-0 text-[12.5px] text-zinc-500">Routing</p>
+            <p className="truncate font-mono text-[11px] text-zinc-600 sm:text-[12px]">
               POST /v1/chat/completions
             </p>
           </div>
 
           <div className="grid gap-px bg-white/[0.04] lg:grid-cols-[minmax(0,1fr)_260px]">
-            <div className="relative min-h-[460px] overflow-hidden bg-[#09090b]">
+            <div className="relative min-h-[320px] overflow-hidden bg-[#09090b] sm:min-h-[400px] lg:min-h-[460px]">
               <ModelGlobe />
               <GlobeHub />
               <ModelCallout />
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#09090b]"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-[#09090b] sm:h-40"
               />
             </div>
 
-            <aside className="bg-[#09090b] p-5">
+            <aside className="bg-[#09090b] p-4 sm:p-5">
               <p className="text-[11px] font-semibold tracking-widest text-zinc-500 uppercase">
                 Checked per request
               </p>
@@ -80,7 +80,7 @@ export function RouterSection() {
 
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent via-black/45 to-black"
+            className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-24 bg-gradient-to-b from-transparent via-black/45 to-black lg:block"
           />
         </div>
       </div>
@@ -93,8 +93,8 @@ function GlobeHub() {
     <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <span className="absolute -inset-6 rounded-full bg-white/[0.03] blur-xl" />
       <span className="animate-orbit-pulse absolute -inset-3 rounded-full border border-white/10" />
-      <span className="relative flex size-[74px] flex-col items-center justify-center rounded-full bg-[#0d0d10]/90">
-        <span className="font-mono text-[12.5px] font-medium text-white">
+      <span className="relative flex size-[62px] flex-col items-center justify-center rounded-full bg-[#0d0d10]/90 sm:size-[74px]">
+        <span className="font-mono text-[11.5px] font-medium text-white sm:text-[12.5px]">
           orbit
         </span>
         <span className="mt-0.5 text-[10px] tracking-wide text-zinc-500">

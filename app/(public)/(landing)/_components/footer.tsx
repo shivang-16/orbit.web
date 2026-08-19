@@ -30,7 +30,7 @@ const ASK_AI = [
 export function Footer() {
   return (
     <footer className="relative w-full overflow-hidden border-t border-white/8 bg-black">
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-12 sm:px-6 sm:pt-16 lg:px-10">
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
           <div className="flex max-w-[260px] shrink-0 flex-col gap-4">
             <Link
@@ -48,7 +48,7 @@ export function Footer() {
 
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 sm:gap-x-16 lg:gap-x-24">
             {Object.entries(LINKS).map(([group, items]) => (
-              <div key={group} className="flex min-w-[120px] flex-col gap-3">
+              <div key={group} className="flex min-w-0 flex-col gap-3">
                 <p className="text-[12px] font-semibold tracking-widest text-zinc-500 uppercase">
                   {group}
                 </p>
@@ -106,7 +106,7 @@ export function Footer() {
       <div
         aria-hidden
         className="pointer-events-none relative -mt-14 w-full overflow-hidden select-none"
-        style={{ height: "clamp(160px, 30vw, 360px)" }}
+        style={{ height: "clamp(110px, 28vw, 360px)" }}
       >
         <svg
           viewBox="0 0 1000 260"
