@@ -18,6 +18,7 @@ import { VendorLogo } from "@/components/models/vendor-logo";
 import { Loader } from "@/components/ui/loader";
 import { fetchCatalogue, type CatalogueModel } from "@/lib/catalogue";
 import {
+  clearPlaygroundThread,
   loadPlaygroundThread,
   PlaygroundError,
   savePlaygroundThread,
@@ -41,6 +42,7 @@ export function PlaygroundPage() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const skipSaveRef = useRef(true);
+  const skipLoadRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -79,7 +81,12 @@ export function PlaygroundPage() {
   useEffect(() => {
     if (!selected) return;
     skipSaveRef.current = true;
-    setMessages(loadPlaygroundThread(selected.slug));
+    if (skipLoadRef.current) {
+      skipLoadRef.current = false;
+      setMessages([]);
+    } else {
+      setMessages(loadPlaygroundThread(selected.slug));
+    }
     setError(null);
   }, [selected?.slug]);
 
@@ -97,6 +104,10 @@ export function PlaygroundPage() {
     abortRef.current?.abort();
     abortRef.current = null;
     setStreaming(false);
+    clearPlaygroundThread(selectedSlug);
+    skipLoadRef.current = true;
+    skipSaveRef.current = true;
+    setMessages([]);
     setSelectedSlug(slug);
     window.localStorage.setItem(SELECTED_MODEL_KEY, slug);
   }
@@ -275,6 +286,9 @@ export function PlaygroundPage() {
             )}
           </div>
         </form>
+        <p className="mt-3 text-center text-[12px] text-zinc-500">
+          This is a temporary chat and will be cleared when you switch models.
+        </p>
       </div>
     </div>
   );
