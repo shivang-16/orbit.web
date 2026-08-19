@@ -180,7 +180,7 @@ function CustomPlanRow() {
         </div>
       </div>
       <Button asChild className="h-12 shrink-0 rounded-xl px-6 text-sm">
-        <a href="mailto:hello@orbit.cloud">Talk to us</a>
+        <a href="mailto:hello@tryorbit.cloud">Talk to us</a>
       </Button>
     </article>
   );
