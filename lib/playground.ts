@@ -2,6 +2,7 @@ import { getStoredOrganizationId } from "@/lib/api";
 
 const PLAYGROUND_STORAGE_PREFIX = "orbit.playground.v1";
 const MAX_STORED_MESSAGES = 60;
+const PLAYGROUND_MAX_TOKENS = 8192;
 
 export type PlaygroundMessage = {
   role: "user" | "assistant";
@@ -92,7 +93,7 @@ export async function streamPlaygroundChat(
     body: JSON.stringify({
       messages,
       stream: true,
-      max_tokens: 2048,
+      max_tokens: PLAYGROUND_MAX_TOKENS,
     }),
     signal,
   });
