@@ -14,8 +14,10 @@ const PALETTE = [
 ];
 
 const NODE_COUNT = 460;
-const CLUSTER_COUNT = 16;
-const EDGE_LIMIT = 700;
+/** Interior nodes: a shell alone projects sparse in the middle, so fill it. */
+const FILL_COUNT = 300;
+const CLUSTER_COUNT = 22;
+const EDGE_LIMIT = 950;
 const PERSPECTIVE = 900;
 const TILT = 0.42;
 
@@ -58,7 +60,7 @@ function buildNodes(radius: number): Node[] {
     };
   });
 
-  return Array.from({ length: NODE_COUNT }, () => {
+  const shellNodes = Array.from({ length: NODE_COUNT }, () => {
     const cluster = clusters[Math.floor(random() * clusters.length)];
     const spread = 0.34 + random() * 0.42;
 
@@ -84,25 +86,61 @@ function buildNodes(radius: number): Node[] {
       glow: large ? 7 + random() * 7 : 0,
     };
   });
+
+  // Scattered through the volume rather than on the surface, and biased
+  // toward the same cluster directions so the fill still looks organic.
+  const fillNodes = Array.from({ length: FILL_COUNT }, () => {
+    const cluster = clusters[Math.floor(random() * clusters.length)];
+    const drift = 0.7 + random() * 0.9;
+
+    const x = cluster.x + (random() - 0.5) * drift;
+    const y = cluster.y + (random() - 0.5) * drift;
+    const z = cluster.z + (random() - 0.5) * drift;
+    const length = Math.sqrt(x * x + y * y + z * z) || 1;
+    const depth = radius * (0.2 + Math.cbrt(random()) * 0.62);
+
+    return {
+      x: (x / length) * depth,
+      y: (y / length) * depth,
+      z: (z / length) * depth,
+      color:
+        random() > 0.5
+          ? cluster.color
+          : PALETTE[Math.floor(random() * PALETTE.length)],
+      size: 0.7 + random() * 1.7,
+      ringed: false,
+      glow: random() > 0.93 ? 5 + random() * 5 : 0,
+    };
+  });
+
+  return [...shellNodes, ...fillNodes];
 }
 
 function buildEdges(nodes: Node[], radius: number) {
-  const threshold = radius * 0.36;
-  const edges: [number, number][] = [];
+  const threshold = radius * 0.3;
+  const candidates: [number, number][] = [];
 
-  for (let i = 0; i < nodes.length && edges.length < EDGE_LIMIT; i += 1) {
-    for (let j = i + 1; j < nodes.length && edges.length < EDGE_LIMIT; j += 1) {
+  for (let i = 0; i < nodes.length; i += 1) {
+    for (let j = i + 1; j < nodes.length; j += 1) {
       const dx = nodes[i].x - nodes[j].x;
       const dy = nodes[i].y - nodes[j].y;
       const dz = nodes[i].z - nodes[j].z;
 
-      if (Math.sqrt(dx * dx + dy * dy + dz * dz) < threshold) {
-        edges.push([i, j]);
+      if (dx * dx + dy * dy + dz * dz < threshold * threshold) {
+        candidates.push([i, j]);
       }
     }
   }
 
-  return edges;
+  if (candidates.length <= EDGE_LIMIT) return candidates;
+
+  // Take an even stride rather than the first N, so connections stay spread
+  // across the whole sphere instead of only among the earliest nodes.
+  const stride = candidates.length / EDGE_LIMIT;
+  return Array.from(
+    { length: EDGE_LIMIT },
+    (_, index) => candidates[Math.floor(index * stride)]
+  );
 }
 
 export function ModelGlobe() {
@@ -172,7 +210,7 @@ export function ModelGlobe() {
       for (const [from, to] of edges) {
         const a = projected[from];
         const b = projected[to];
-        const alpha = Math.min(a.depth, b.depth) * 0.16;
+        const alpha = Math.min(a.depth, b.depth) * 0.22;
         if (alpha <= 0.01) continue;
 
         context!.strokeStyle = `rgba(148, 163, 184, ${alpha})`;
