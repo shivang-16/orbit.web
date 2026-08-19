@@ -7,7 +7,7 @@ export function FrontierCard({ models }: { models: CatalogueModel[] }) {
   const lead = models[0];
 
   return (
-    <section className="rounded-xl border border-white/10 bg-[#0b0b0c] p-5">
+    <section className="rounded-xl border border-white/10 bg-[#0b0b0c] p-4 sm:p-5">
       <p className="text-[13px] text-zinc-400">Today&apos;s frontier</p>
       <h2 className="mt-2.5 text-[21px] leading-tight font-semibold tracking-tight text-white">
         {lead

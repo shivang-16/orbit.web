@@ -51,7 +51,7 @@ export function UsageChart({ series }: { series: UsageDay[] }) {
             No inference usage in this range.
           </p>
         ) : (
-          <div className="h-[340px] w-full">
+          <div className="h-[220px] w-full sm:h-[340px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={rows} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
                 <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />

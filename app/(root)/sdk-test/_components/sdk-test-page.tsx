@@ -160,7 +160,7 @@ export function SdkTestPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-8 text-white">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 text-white sm:px-6 sm:py-8">
       <h1 className="text-2xl font-medium tracking-tight">SDK test</h1>
       <p className="mt-2 max-w-2xl text-sm text-zinc-400">
         Hits Orbit with the official OpenAI and Anthropic SDKs, both streaming. OpenAI uses{" "}

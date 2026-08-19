@@ -36,8 +36,8 @@ export function ApiKeysPage() {
   }, [load]);
 
   return (
-    <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
-      <div className="flex items-start justify-between gap-4">
+    <div className="mx-auto w-full max-w-[1080px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="flex flex-col items-start gap-3 sm:flex-row sm:justify-between sm:gap-4">
         <div>
           <h1 className="text-[22px] font-semibold tracking-tight text-white">API Keys</h1>
           <p className="mt-1 text-[13px] text-zinc-400">Create and manage your API keys.</p>

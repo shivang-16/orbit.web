@@ -22,7 +22,7 @@ export function ModalityTabs({
   counts: Record<ModalityKey, number>;
 }) {
   return (
-    <div className="flex items-center gap-1 border-b border-white/10">
+    <div className="flex items-center gap-1 overflow-x-auto border-b border-white/10">
       {TAB_META.filter((tab) => counts[tab.key] > 0).map((tab) => {
         const TabIcon = tab.icon;
         const isActive = active === tab.key;
@@ -31,7 +31,7 @@ export function ModalityTabs({
             key={tab.key}
             type="button"
             onClick={() => onChange(tab.key)}
-            className={`flex items-center gap-1.5 border-b-2 px-3 py-2 text-[13px] transition-colors ${
+            className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-[13px] transition-colors ${
               isActive
                 ? "border-white text-white"
                 : "border-transparent text-zinc-400 hover:text-zinc-300"

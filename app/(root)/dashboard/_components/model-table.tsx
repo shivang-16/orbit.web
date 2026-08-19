@@ -16,7 +16,7 @@ export function ModelTable({
   models: CatalogueModel[];
 }) {
   return (
-    <section className="rounded-xl border border-white/10 bg-[#0b0b0c] p-5">
+    <section className="rounded-xl border border-white/10 bg-[#0b0b0c] p-4 sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-[13px] text-white">{title}</h2>
@@ -30,8 +30,9 @@ export function ModelTable({
         </Link>
       </div>
 
-      <div className="mt-5">
-        <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_4rem_5.5rem] items-center gap-3 border-b border-white/5 pb-2 text-xs text-zinc-400">
+      <div className="mt-5 overflow-x-auto">
+        <div className="min-w-[22rem]">
+          <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_4rem_5.5rem] items-center gap-3 border-b border-white/5 pb-2 text-xs text-zinc-400">
           <span />
           <span>Model</span>
           <span className="text-right">Context</span>
@@ -59,6 +60,7 @@ export function ModelTable({
             <li className="py-6 text-[13px] text-zinc-400">Nothing tagged yet.</li>
           ) : null}
         </ol>
+        </div>
       </div>
     </section>
   );

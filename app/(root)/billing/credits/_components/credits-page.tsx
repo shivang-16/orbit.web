@@ -39,7 +39,7 @@ export function CreditsPage() {
   const orgName = credits?.organization_name ?? activeOrganization?.name ?? "your organization";
 
   return (
-    <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
+    <div className="mx-auto w-full max-w-[1080px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <p className="text-[12px] text-zinc-500">Credits</p>
       <h1 className="mt-1 text-[22px] font-semibold tracking-tight text-white">Credits</h1>
       <p className="mt-1 text-[13px] text-zinc-400">

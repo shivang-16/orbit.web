@@ -101,7 +101,7 @@ export function CatalogueList() {
   }, [models, search, vendor, tag, modality]);
 
   return (
-    <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
+    <div className="mx-auto w-full max-w-[1080px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <div className="flex items-center justify-between">
         <h1 className="text-[17px] font-semibold tracking-tight text-white">Models</h1>
       </div>

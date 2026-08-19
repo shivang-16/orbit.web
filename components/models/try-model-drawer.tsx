@@ -149,10 +149,10 @@ export function TryModelDrawer({
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:duration-300 data-[state=closed]:duration-200" />
         <Dialog.Content
           className={cn(
-            "fixed inset-y-0 right-0 z-50 flex flex-col border-l border-white/10 bg-[#0b0b0c] shadow-2xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right data-[state=open]:duration-300 data-[state=closed]:duration-200 data-[state=open]:ease-out data-[state=closed]:ease-in",
+            "fixed inset-y-0 right-0 z-50 flex w-full max-w-full flex-col border-l border-white/10 bg-[#0b0b0c] shadow-2xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right data-[state=open]:duration-300 data-[state=closed]:duration-200 data-[state=open]:ease-out data-[state=closed]:ease-in",
             dragging && "select-none"
           )}
-          style={{ width }}
+          style={{ width, maxWidth: "100vw" }}
         >
           <div
             role="separator"
@@ -162,7 +162,7 @@ export function TryModelDrawer({
             onPointerMove={onResizeMove}
             onPointerUp={onResizeEnd}
             onPointerCancel={onResizeEnd}
-            className="absolute inset-y-0 left-0 z-10 flex w-4 -translate-x-1/2 cursor-ew-resize touch-none items-center justify-center"
+            className="absolute inset-y-0 left-0 z-10 hidden w-4 -translate-x-1/2 cursor-ew-resize touch-none items-center justify-center sm:flex"
           >
             <span
               className={cn(
@@ -214,7 +214,7 @@ export function TryModelDrawer({
                     onClick={() => setSdkTab(item.key)}
                     aria-pressed={sdkTab === item.key}
                     className={cn(
-                      "rounded-lg border px-2.5 py-2 text-center text-[13.5px] font-medium transition-all",
+                      "rounded-lg border px-1.5 py-2 text-center text-[12px] font-medium transition-all sm:px-2.5 sm:text-[13.5px]",
                       sdkTab === item.key
                         ? "border-white/25 bg-white/[0.08] text-white"
                         : "border-white/10 text-zinc-400 hover:border-white/15 hover:text-white"

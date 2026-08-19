@@ -203,7 +203,7 @@ export function PlaygroundPage() {
     <div className="flex h-full min-h-0 flex-col bg-black">
       {empty ? null : (
         <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-2xl space-y-4 px-4 py-8">
+          <div className="mx-auto w-full max-w-2xl space-y-4 px-3 py-6 sm:px-4 sm:py-8">
             {messages.map((item) => (
               <ChatBubble
                 key={item.id}
@@ -218,7 +218,7 @@ export function PlaygroundPage() {
 
       <div
         className={cn(
-          "mx-auto flex w-full max-w-2xl flex-col px-4",
+          "mx-auto flex w-full max-w-2xl flex-col px-3 sm:px-4",
           empty ? "flex-1 items-center justify-center pb-24" : "pb-6"
         )}
       >
@@ -242,7 +242,7 @@ export function PlaygroundPage() {
 
         <form
           onSubmit={onSubmit}
-          className="w-full rounded-[28px] border border-white/10 bg-[#141414] px-4 pt-3.5 pb-3"
+          className="w-full rounded-2xl border border-white/10 bg-[#141414] px-3 pt-3 pb-3 sm:rounded-[28px] sm:px-4 sm:pt-3.5"
         >
           <textarea
             ref={textareaRef}
@@ -314,7 +314,7 @@ function ModelSwitcher({
           className="flex items-center gap-1.5 rounded-full px-2 py-1 text-[13px] text-zinc-300 transition-colors hover:bg-white/5 disabled:opacity-50"
         >
           <VendorLogo vendor={selected.vendor} className="size-5" />
-          <span className="max-w-[160px] truncate">{selected.name}</span>
+          <span className="max-w-[120px] truncate sm:max-w-[160px]">{selected.name}</span>
           <CaretDownIcon size={12} className="text-zinc-500" />
         </button>
       </DropdownMenu.Trigger>

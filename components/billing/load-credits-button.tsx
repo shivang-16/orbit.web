@@ -33,11 +33,11 @@ export function LoadCreditsButton() {
   }, [activeOrganization]);
 
   return (
-    <Button asChild variant="outline" size="lg" className="px-3">
+    <Button asChild variant="outline" size="lg" className="shrink-0 px-2.5 sm:px-3">
       <Link href="/billing/credits">
         <WalletIcon size={14} className="text-zinc-300" />
-        <span className="text-zinc-300">Load credits</span>
-        <span className="h-3.5 w-px bg-white/20" />
+        <span className="hidden text-zinc-300 sm:inline">Load credits</span>
+        <span className="hidden h-3.5 w-px bg-white/20 sm:block" />
         <span className="font-medium text-white">
           {remainingMicros === null ? "—" : formatCreditDollars(remainingMicros)}
         </span>

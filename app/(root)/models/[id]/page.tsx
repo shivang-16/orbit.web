@@ -49,7 +49,7 @@ export default function ModelDetailPage() {
   }, [id]);
 
   return (
-    <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
+    <div className="mx-auto w-full max-w-[1080px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <Link
         href="/models"
         className="inline-flex items-center gap-1.5 text-[13px] text-zinc-400 transition-colors hover:text-white"
@@ -77,12 +77,12 @@ function ModelDetail({ model }: { model: CatalogueModelDetail }) {
 
   return (
     <div className="mt-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <VendorLogo vendor={model.vendor} className="size-10" />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <VendorLogo vendor={model.vendor} className="size-10 shrink-0" />
           <div className="min-w-0">
-            <h1 className="text-2xl font-semibold tracking-tight text-white">{model.name}</h1>
-            <p className="mt-0.5 text-[13px] text-zinc-400">
+            <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{model.name}</h1>
+            <p className="mt-0.5 truncate text-[13px] text-zinc-400">
               {model.vendor}/{slugify(model.name)}
             </p>
           </div>

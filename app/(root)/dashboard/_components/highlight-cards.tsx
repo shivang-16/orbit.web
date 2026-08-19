@@ -17,7 +17,7 @@ export function HighlightCards({ highlights }: { highlights: CatalogueHighlight[
   const cards = Array.isArray(highlights) ? highlights : [];
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {cards.map((highlight, index) => (
         <HighlightCard
           key={highlight.tag}
