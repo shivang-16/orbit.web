@@ -1,14 +1,15 @@
 "use client";
 
-import { ImageIcon, SquaresFourIcon, TextAaIcon } from "@phosphor-icons/react";
+import { ImageIcon, SpeakerHighIcon, SquaresFourIcon, TextAaIcon } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 
-export type ModalityKey = "all" | "text" | "image";
+export type ModalityKey = "all" | "text" | "image" | "audio";
 
 const TAB_META: { key: ModalityKey; label: string; icon: Icon }[] = [
   { key: "all", label: "All", icon: SquaresFourIcon },
   { key: "text", label: "Text", icon: TextAaIcon },
   { key: "image", label: "Image", icon: ImageIcon },
+  { key: "audio", label: "Audio", icon: SpeakerHighIcon },
 ];
 
 export function ModalityTabs({

@@ -56,6 +56,14 @@ export const TAG_META: Record<string, TagMeta> = {
     label: "Cost efficient",
     description: "The cheapest capability per token.",
   },
+  vision: {
+    label: "Vision",
+    description: "Accepts images alongside text.",
+  },
+  audio: {
+    label: "Audio",
+    description: "Understands speech and audio input.",
+  },
 };
 
 export function tagLabel(tag: string) {

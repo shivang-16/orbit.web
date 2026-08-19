@@ -9,18 +9,19 @@ import { Loader } from "@/components/ui/loader";
 
 import { CatalogueListView } from "./catalogue-list-view";
 import { CatalogueTableView } from "./catalogue-table-view";
-import { CatalogueToolbar, type SortKey, type ViewKey } from "./catalogue-toolbar";
+import { CatalogueToolbar, type CatalogueVendorSummary, type ViewKey } from "./catalogue-toolbar";
 import { ModalityTabs, type ModalityKey } from "./modality-tabs";
 
 export function CatalogueList() {
   const searchParams = useSearchParams();
   const initialTag = searchParams.get("tag") ?? "";
+  const initialVendor = searchParams.get("vendor") ?? "";
 
   const [models, setModels] = useState<CatalogueModel[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortKey>("newest");
+  const [vendor, setVendor] = useState(initialVendor);
   const [tag, setTag] = useState(initialTag);
   const [modality, setModality] = useState<ModalityKey>("all");
   const [view, setView] = useState<ViewKey>("list");
@@ -52,13 +53,25 @@ export function CatalogueList() {
       .sort((a, b) => b.count - a.count);
   }, [models]);
 
+  const vendorOptions: CatalogueVendorSummary[] = useMemo(() => {
+    if (!models) return [];
+    const counts = new Map<string, number>();
+    for (const model of models) {
+      counts.set(model.vendor, (counts.get(model.vendor) ?? 0) + 1);
+    }
+    return Array.from(counts.entries())
+      .map(([value, count]) => ({ vendor: value, count }))
+      .sort((a, b) => vendorLabel(a.vendor).localeCompare(vendorLabel(b.vendor)));
+  }, [models]);
+
   const modalityCounts = useMemo(() => {
-    const counts: Record<ModalityKey, number> = { all: 0, text: 0, image: 0 };
+    const counts: Record<ModalityKey, number> = { all: 0, text: 0, image: 0, audio: 0 };
     if (!models) return counts;
     counts.all = models.length;
     for (const model of models) {
       if (model.modalities.includes("text")) counts.text += 1;
       if (model.modalities.includes("image")) counts.image += 1;
+      if (model.modalities.includes("audio")) counts.audio += 1;
     }
     return counts;
   }, [models]);
@@ -68,6 +81,7 @@ export function CatalogueList() {
     const query = search.trim().toLowerCase();
 
     const result = models.filter((model) => {
+      if (vendor && model.vendor !== vendor) return false;
       if (tag && !model.tags.includes(tag)) return false;
       if (modality !== "all" && !model.modalities.includes(modality)) return false;
       if (
@@ -81,11 +95,10 @@ export function CatalogueList() {
     });
 
     return result.sort((a, b) => {
-      if (sort === "name") return a.name.localeCompare(b.name);
       if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
       return a.name.localeCompare(b.name);
     });
-  }, [models, search, tag, modality, sort]);
+  }, [models, search, vendor, tag, modality]);
 
   return (
     <div className="mx-auto w-full max-w-[1080px] px-6 py-8 lg:px-8">
@@ -102,8 +115,9 @@ export function CatalogueList() {
           <CatalogueToolbar
             search={search}
             onSearchChange={setSearch}
-            sort={sort}
-            onSortChange={setSort}
+            vendor={vendor}
+            onVendorChange={setVendor}
+            vendorOptions={vendorOptions}
             tag={tag}
             onTagChange={setTag}
             tagOptions={tagOptions}

@@ -1,32 +1,33 @@
 "use client";
 
 import {
+  BuildingsIcon,
   CaretDownIcon,
   FunnelIcon,
   ListBulletsIcon,
   MagnifyingGlassIcon,
-  SortAscendingIcon,
   TableIcon,
 } from "@phosphor-icons/react";
 import { DropdownMenu } from "radix-ui";
 
+import { vendorLabel } from "@/components/models/model-identity";
 import { Button } from "@/components/ui/button";
 import type { CatalogueTagSummary } from "@/lib/catalogue";
 import { tagLabel } from "@/lib/tags";
 
-export type SortKey = "newest" | "name";
 export type ViewKey = "list" | "table";
 
-const SORT_LABEL: Record<SortKey, string> = {
-  newest: "Newest",
-  name: "Name (A–Z)",
+export type CatalogueVendorSummary = {
+  vendor: string;
+  count: number;
 };
 
 export function CatalogueToolbar({
   search,
   onSearchChange,
-  sort,
-  onSortChange,
+  vendor,
+  onVendorChange,
+  vendorOptions,
   tag,
   onTagChange,
   tagOptions,
@@ -35,8 +36,9 @@ export function CatalogueToolbar({
 }: {
   search: string;
   onSearchChange: (value: string) => void;
-  sort: SortKey;
-  onSortChange: (value: SortKey) => void;
+  vendor: string;
+  onVendorChange: (value: string) => void;
+  vendorOptions: CatalogueVendorSummary[];
   tag: string;
   onTagChange: (value: string) => void;
   tagOptions: CatalogueTagSummary[];
@@ -62,8 +64,8 @@ export function CatalogueToolbar({
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <Button type="button" variant="outline" className="text-zinc-300">
-              <SortAscendingIcon size={14} className="text-zinc-400" />
-              {SORT_LABEL[sort]}
+              <BuildingsIcon size={14} className="text-zinc-400" />
+              {vendor ? vendorLabel(vendor) : "All vendors"}
               <CaretDownIcon size={11} className="text-zinc-400" />
             </Button>
           </DropdownMenu.Trigger>
@@ -71,15 +73,22 @@ export function CatalogueToolbar({
             <DropdownMenu.Content
               align="start"
               sideOffset={6}
-              className="z-50 min-w-[10rem] rounded-lg border border-white/10 bg-zinc-950 p-1 shadow-xl"
+              className="z-50 max-h-72 min-w-[12rem] overflow-y-auto rounded-lg border border-white/10 bg-zinc-950 p-1 shadow-xl"
             >
-              {(Object.keys(SORT_LABEL) as SortKey[]).map((key) => (
+              <DropdownMenu.Item
+                onSelect={() => onVendorChange("")}
+                className="cursor-pointer rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
+              >
+                All vendors
+              </DropdownMenu.Item>
+              {vendorOptions.map((option) => (
                 <DropdownMenu.Item
-                  key={key}
-                  onSelect={() => onSortChange(key)}
-                  className="cursor-pointer rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
+                  key={option.vendor}
+                  onSelect={() => onVendorChange(option.vendor)}
+                  className="flex cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
                 >
-                  {SORT_LABEL[key]}
+                  {vendorLabel(option.vendor)}
+                  <span className="text-xs text-zinc-400">{option.count}</span>
                 </DropdownMenu.Item>
               ))}
             </DropdownMenu.Content>

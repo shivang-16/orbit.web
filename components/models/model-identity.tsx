@@ -4,6 +4,12 @@ const VENDOR_LABEL: Record<string, string> = {
   anthropic: "Anthropic",
   openai: "OpenAI",
   moonshot: "Moonshot AI",
+  mistral: "Mistral AI",
+  deepseek: "DeepSeek",
+  google: "Google",
+  meta: "Meta",
+  minimax: "MiniMax",
+  qwen: "Qwen",
 };
 
 export function vendorLabel(vendor: string) {
