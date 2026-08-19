@@ -5,6 +5,7 @@ import {
   BookOpenTextIcon,
   CaretDownIcon,
   ChartLineIcon,
+  ChatCircleIcon,
   CreditCardIcon,
   KeyIcon,
   SquaresFourIcon,
@@ -27,8 +28,9 @@ type NavGroup = {
 const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
   { label: "Overview", href: "/dashboard", icon: SquaresFourIcon },
   { label: "Model Catalogue", href: "/models", icon: StackIcon },
-  { label: "API Keys", href: "/api-keys", icon: KeyIcon },
+  { label: "Playground", href: "/playground", icon: ChatCircleIcon },
   { label: "Usage", href: "/usage", icon: ChartLineIcon },
+  { label: "API Keys", href: "/api-keys", icon: KeyIcon },
   {
     label: "Billing",
     icon: CreditCardIcon,
