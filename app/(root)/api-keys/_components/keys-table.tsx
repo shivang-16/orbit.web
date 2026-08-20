@@ -12,11 +12,13 @@ export function KeysTable({
   keys,
   search,
   onSearchChange,
+  canDelete,
   onDelete,
 }: {
   keys: APIKey[];
   search: string;
   onSearchChange: (value: string) => void;
+  canDelete: boolean;
   onDelete: (id: string) => Promise<void>;
 }) {
   const query = search.trim().toLowerCase();
@@ -49,9 +51,11 @@ export function KeysTable({
                 <th className="px-4 py-2.5 font-normal">Key</th>
                 <th className="px-4 py-2.5 font-normal">Expires</th>
                 <th className="px-4 py-2.5 font-normal">Last used</th>
-                <th className="w-12 px-4 py-2.5 text-right font-normal">
-                  <span className="sr-only">Actions</span>
-                </th>
+                {canDelete ? (
+                  <th className="w-12 px-4 py-2.5 text-right font-normal">
+                    <span className="sr-only">Actions</span>
+                  </th>
+                ) : null}
               </tr>
             </thead>
             <tbody>
@@ -72,14 +76,16 @@ export function KeysTable({
                   <td className="whitespace-nowrap px-4 py-3 text-zinc-400">
                     {formatKeyDate(key.last_used_at)}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <DeleteKeyButton name={key.name} onConfirm={() => onDelete(key.id)} />
-                  </td>
+                  {canDelete ? (
+                    <td className="px-4 py-3 text-right">
+                      <DeleteKeyButton name={key.name} onConfirm={() => onDelete(key.id)} />
+                    </td>
+                  ) : null}
                 </tr>
               ))}
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-10 text-center text-zinc-500">
+                  <td colSpan={canDelete ? 4 : 3} className="px-4 py-10 text-center text-zinc-500">
                     {keys.length === 0 ? "No API keys yet." : "No keys match that name."}
                   </td>
                 </tr>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CaretUpDownIcon, CheckIcon, PlusIcon } from "@phosphor-icons/react";
+import Link from "next/link";
+import { ArrowRightIcon, CaretUpDownIcon, CheckIcon, PlusIcon } from "@phosphor-icons/react";
 import { DropdownMenu } from "radix-ui";
 
 import { CreateOrgDialog } from "@/components/org/create-org-dialog";
@@ -10,8 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 
 export function OrgSwitcher() {
-  const { organizations, activeOrganization, setActiveOrganizationId, loading } = useOrg();
+  const { organizations, activeOrganization, entitlement, setActiveOrganizationId, loading } = useOrg();
   const [createOpen, setCreateOpen] = useState(false);
+  const atCreateLimit = Boolean(entitlement && !entitlement.can_create_organization);
 
   return (
     <>
@@ -51,16 +53,28 @@ export function OrgSwitcher() {
 
             <DropdownMenu.Separator className="my-1 h-px bg-white/10" />
 
-            <DropdownMenu.Item
-              onSelect={(event) => {
-                event.preventDefault();
-                setCreateOpen(true);
-              }}
-              className="flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm text-zinc-300 outline-none data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
-            >
-              <PlusIcon size={14} />
-              Create organization
-            </DropdownMenu.Item>
+            {loading ? null : atCreateLimit ? (
+              <DropdownMenu.Item asChild>
+                <Link
+                  href="/pricing"
+                  className="flex cursor-pointer items-center justify-between rounded-md px-2.5 py-2 text-sm text-zinc-300 outline-none data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
+                >
+                  Upgrade to create orgs
+                  <ArrowRightIcon size={14} className="shrink-0 text-zinc-400" />
+                </Link>
+              </DropdownMenu.Item>
+            ) : (
+              <DropdownMenu.Item
+                onSelect={(event) => {
+                  event.preventDefault();
+                  setCreateOpen(true);
+                }}
+                className="flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm text-zinc-300 outline-none data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
+              >
+                <PlusIcon size={14} />
+                Create organization
+              </DropdownMenu.Item>
+            )}
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>

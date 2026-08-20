@@ -12,18 +12,22 @@ import { KeysTable } from "./keys-table";
 export function ApiKeysPage() {
   const { activeOrganization } = useOrg();
   const [keys, setKeys] = useState<APIKey[] | null>(null);
+  const [canDelete, setCanDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   const load = useCallback(() => {
     if (!activeOrganization) {
       setKeys([]);
+      setCanDelete(false);
       return;
     }
     setKeys(null);
+    setCanDelete(false);
     fetchAPIKeys()
       .then((data) => {
         setKeys(data.keys);
+        setCanDelete(Boolean(data.can_delete));
         setError(null);
       })
       .catch(() => {
@@ -55,6 +59,7 @@ export function ApiKeysPage() {
             keys={keys}
             search={search}
             onSearchChange={setSearch}
+            canDelete={canDelete}
             onDelete={async (id) => {
               await deleteAPIKey(id);
               setKeys((current) => current?.filter((key) => key.id !== id) ?? null);

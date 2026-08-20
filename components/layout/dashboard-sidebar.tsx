@@ -8,6 +8,7 @@ import {
   ChatCircleIcon,
   CreditCardIcon,
   KeyIcon,
+  GearSixIcon,
   SquaresFourIcon,
   StackIcon,
 } from "@phosphor-icons/react";
@@ -32,6 +33,7 @@ const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
   // { label: "SDK Test", href: "/sdk-test", icon: FlaskIcon },
   { label: "Usage", href: "/usage", icon: ChartLineIcon },
   { label: "API Keys", href: "/api-keys", icon: KeyIcon },
+  { label: "Documentation", href: "/docs", icon: BookOpenTextIcon },
   {
     label: "Billing",
     icon: CreditCardIcon,
@@ -40,7 +42,11 @@ const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
       { label: "Invoices", href: "/billing/invoices" },
     ],
   },
-  { label: "Documentation", href: "/docs", icon: BookOpenTextIcon },
+  {
+    label: "Settings",
+    icon: GearSixIcon,
+    children: [{ label: "Organization", href: "/settings/organization" }],
+  },
 ];
 
 function isGroup(item: NavLeaf | NavGroup): item is NavGroup {
@@ -71,7 +77,7 @@ export function DashboardSidebar() {
       <nav className="mt-6 flex flex-col gap-0.5">
         {NAV_ITEMS.map((item) =>
           isGroup(item) ? (
-            <BillingNav key={item.label} item={item} pathname={pathname} />
+            <GroupNav key={item.label} item={item} pathname={pathname} />
           ) : (
             <LeafLink key={item.href} item={item} pathname={pathname} />
           )
@@ -103,8 +109,10 @@ function LeafLink({ item, pathname }: { item: NavLeaf; pathname: string }) {
   );
 }
 
-function BillingNav({ item, pathname }: { item: NavGroup; pathname: string }) {
-  const childActive = item.children.some((child) => pathname === child.href);
+function GroupNav({ item, pathname }: { item: NavGroup; pathname: string }) {
+  const childActive = item.children.some(
+    (child) => pathname === child.href || pathname.startsWith(`${child.href}/`)
+  );
   const [open, setOpen] = useState(childActive);
   const ItemIcon = item.icon;
 

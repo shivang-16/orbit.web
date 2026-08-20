@@ -9,7 +9,7 @@ import { Loader } from "@/components/ui/loader";
 import { fetchOrganizationCredits, formatExactCreditDollars, type OrganizationCredits } from "@/lib/credits";
 
 export function CreditsPage() {
-  const { activeOrganization } = useOrg();
+  const { activeOrganization, loading } = useOrg();
   const [credits, setCredits] = useState<OrganizationCredits | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +48,7 @@ export function CreditsPage() {
 
       {error ? (
         <p className="mt-6 text-[13px] text-red-400">{error}</p>
-      ) : !credits ? (
+      ) : loading || !credits ? (
         <Loader />
       ) : (
         <>

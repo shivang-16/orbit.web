@@ -18,6 +18,8 @@ export type APIKey = {
 export type APIKeyList = {
   keys: APIKey[];
   total: number;
+  role: "admin" | "member";
+  can_delete: boolean;
 };
 
 export type CreateAPIKeyResponse = {

@@ -1,11 +1,9 @@
 "use client";
 
-import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react";
-import { DropdownMenu } from "radix-ui";
-
 import { formatCreditDate, formatLatency, formatSignedCreditDollars } from "@/lib/credits";
 import { USAGE_PAGE_SIZES, type UsageRequest } from "@/lib/usage";
 import { cn } from "@/lib/utils";
+import { Select } from "@/components/ui/select";
 
 export function UsageTable({
   requests,
@@ -120,35 +118,17 @@ function UsagePagination({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-3">
       <div className="flex flex-wrap items-center gap-3 text-[13px] text-zinc-400">
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-[13px] text-zinc-200 transition-colors hover:bg-white/5"
-            >
-              Rows: {limit}
-              <CaretDownIcon size={12} className="text-zinc-500" />
-            </button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              align="start"
-              sideOffset={6}
-              className="z-50 min-w-[5.5rem] rounded-lg border border-white/10 bg-zinc-950 p-1 shadow-xl"
-            >
-              {USAGE_PAGE_SIZES.map((size) => (
-                <DropdownMenu.Item
-                  key={size}
-                  onSelect={() => onLimitChange(size)}
-                  className="flex cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
-                >
-                  {size}
-                  {size === limit ? <CheckIcon size={12} className="text-zinc-300" /> : null}
-                </DropdownMenu.Item>
-              ))}
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+        <Select
+          variant="compact"
+          value={limit}
+          onValueChange={onLimitChange}
+          ariaLabel="Rows per page"
+          displayValue={`Rows: ${limit}`}
+          options={USAGE_PAGE_SIZES.map((size) => ({
+            value: size,
+            label: String(size),
+          }))}
+        />
         <span>
           {total === 0 ? "Showing 0 of 0" : `Showing ${from}-${to} of ${total}`}
         </span>

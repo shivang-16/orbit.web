@@ -6,6 +6,7 @@ import { Dialog } from "radix-ui";
 
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
+import { APIError } from "@/lib/api";
 import { createOrganization } from "@/lib/organizations";
 import { useOrg } from "@/components/org/org-context";
 
@@ -37,12 +38,16 @@ export function CreateOrgDialog({
     setSubmitting(true);
     setError(null);
     try {
-      const org = await createOrganization(name.trim(), description.trim());
-      addOrganization(org);
+      const result = await createOrganization(name.trim(), description.trim());
+      addOrganization(result.organization, result.entitlement);
       onOpenChange(false);
       reset();
-    } catch {
-      setError("Could not create this organization.");
+    } catch (error) {
+      if (error instanceof APIError && error.code === "org_limit") {
+        setError("Your plan cannot create more organizations. Upgrade to add another.");
+      } else {
+        setError("Could not create this organization.");
+      }
       setSubmitting(false);
     }
   }

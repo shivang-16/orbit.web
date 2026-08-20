@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { CaretDownIcon, CheckIcon, CopyIcon, PlusIcon, XIcon } from "@phosphor-icons/react";
-import { Dialog, DropdownMenu } from "radix-ui";
+import { CheckIcon, CopyIcon, PlusIcon, XIcon } from "@phosphor-icons/react";
+import { Dialog } from "radix-ui";
 
 import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
+import { Select } from "@/components/ui/select";
 import { createAPIKey, type APIKeyExpiration, type CreateAPIKeyResponse } from "@/lib/api-keys";
 
 const EXPIRATION_OPTIONS: { value: APIKeyExpiration; label: string }[] = [
@@ -125,37 +126,13 @@ export function CreateKeyDialog({ onCreated }: { onCreated: () => void }) {
 
               <div>
                 <span className="text-[13px] text-zinc-300">Expiration</span>
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger asChild>
-                    <button
-                      type="button"
-                      className="mt-1.5 flex h-9 w-full items-center justify-between rounded-lg border border-white/10 bg-black px-3 text-left text-[13px] font-normal text-white outline-none hover:border-white/15 focus:border-white/20"
-                    >
-                      {EXPIRATION_OPTIONS.find((option) => option.value === expiration)?.label}
-                      <CaretDownIcon size={12} className="shrink-0 text-zinc-500" />
-                    </button>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Portal>
-                    <DropdownMenu.Content
-                      align="start"
-                      sideOffset={6}
-                      className="z-[60] w-[var(--radix-dropdown-menu-trigger-width)] rounded-lg border border-white/10 bg-zinc-950 p-1 shadow-xl"
-                    >
-                      {EXPIRATION_OPTIONS.map((option) => (
-                        <DropdownMenu.Item
-                          key={option.value}
-                          onSelect={() => setExpiration(option.value)}
-                          className="flex cursor-pointer items-center justify-between gap-3 rounded-md px-2.5 py-1.5 text-[13px] text-white outline-none data-[highlighted]:bg-white/10"
-                        >
-                          {option.label}
-                          {option.value === expiration ? (
-                            <CheckIcon size={12} className="shrink-0 text-zinc-400" />
-                          ) : null}
-                        </DropdownMenu.Item>
-                      ))}
-                    </DropdownMenu.Content>
-                  </DropdownMenu.Portal>
-                </DropdownMenu.Root>
+                <Select
+                  className="mt-1.5"
+                  value={expiration}
+                  onValueChange={setExpiration}
+                  ariaLabel="Expiration"
+                  options={EXPIRATION_OPTIONS}
+                />
               </div>
 
               {error ? <p className="text-[13px] text-red-400">{error}</p> : null}
