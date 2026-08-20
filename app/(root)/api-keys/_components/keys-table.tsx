@@ -26,98 +26,73 @@ export function KeysTable({
   );
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0b0b0c]">
-      <div className="border-b border-white/10 p-3">
-        <div className="relative max-w-xs">
-          <MagnifyingGlassIcon
-            size={14}
-            className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-zinc-500"
-          />
-          <input
-            value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search by name..."
-            className="h-8 w-full rounded-lg border border-white/10 bg-black pl-8 pr-3 text-[13px] text-white outline-none placeholder:text-zinc-500 focus:border-white/20"
-          />
+    <div className="flex flex-col gap-3">
+      <div className="relative max-w-xs">
+        <MagnifyingGlassIcon
+          size={14}
+          className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-zinc-400"
+        />
+        <input
+          value={search}
+          onChange={(event) => onSearchChange(event.target.value)}
+          placeholder="Search by name..."
+          aria-label="Search API keys by name"
+          className="h-8 w-full rounded-lg border border-white/10 bg-[#0b0b0c] pl-8 pr-3 text-[13px] text-white outline-none placeholder:text-zinc-400 focus:border-white/20"
+        />
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0b0b0c]">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-left text-[13px]">
+            <thead>
+              <tr className="border-b border-white/10 text-xs text-zinc-500">
+                <th className="px-4 py-2.5 font-normal">Key</th>
+                <th className="px-4 py-2.5 font-normal">Expires</th>
+                <th className="px-4 py-2.5 font-normal">Last used</th>
+                <th className="w-12 px-4 py-2.5 text-right font-normal">
+                  <span className="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((key) => (
+                <tr
+                  key={key.id}
+                  className="border-b border-white/5 transition-colors last:border-b-0 hover:bg-white/[0.03]"
+                >
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-white">{key.name}</p>
+                    <p className="mt-0.5 font-mono text-[11px] tracking-wide text-zinc-500">
+                      {key.key_preview}
+                    </p>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-zinc-400">
+                    {formatKeyDate(key.expires_at)}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-zinc-400">
+                    {formatKeyDate(key.last_used_at)}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <DeleteKeyButton name={key.name} onConfirm={() => onDelete(key.id)} />
+                  </td>
+                </tr>
+              ))}
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-4 py-10 text-center text-zinc-500">
+                    {keys.length === 0 ? "No API keys yet." : "No keys match that name."}
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
         </div>
-      </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px] text-left text-[13px]">
-          <thead>
-            <tr className="border-b border-white/10 text-xs text-zinc-500">
-              <th className="px-4 py-2.5 font-normal">Key</th>
-              <th className="px-4 py-2.5 font-normal">Status</th>
-              <th className="px-4 py-2.5 font-normal">Expires</th>
-              <th className="px-4 py-2.5 font-normal">Last used</th>
-              <th className="w-16 px-4 py-2.5 text-right font-normal">
-                <span className="sr-only">Actions</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((key) => (
-              <tr
-                key={key.id}
-                className="border-b border-white/5 transition-colors last:border-b-0 hover:bg-white/[0.03]"
-              >
-                <td className="px-4 py-3">
-                  <p className="font-medium text-white">{key.name}</p>
-                  <p className="mt-0.5 font-mono text-[11px] tracking-wide text-zinc-500">
-                    {key.key_preview}
-                  </p>
-                </td>
-                <td className="px-4 py-3">
-                  <StatusBadge status={key.status} />
-                </td>
-                <td className="whitespace-nowrap px-4 py-3 text-zinc-300">
-                  {formatKeyDate(key.expires_at)}
-                </td>
-                <td className="whitespace-nowrap px-4 py-3 text-zinc-300">
-                  {formatKeyDate(key.last_used_at)}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <DeleteKeyButton name={key.name} onConfirm={() => onDelete(key.id)} />
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="px-4 py-10 text-center text-zinc-500">
-                  {keys.length === 0 ? "No API keys yet." : "No keys match that name."}
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
+        <p className="border-t border-white/10 px-4 py-2.5 text-xs text-zinc-500">
+          {filtered.length} key{filtered.length === 1 ? "" : "s"}
+        </p>
       </div>
-
-      <p className="border-t border-white/10 px-4 py-2.5 text-xs text-zinc-500">
-        {filtered.length} key{filtered.length === 1 ? "" : "s"}
-      </p>
     </div>
-  );
-}
-
-function StatusBadge({ status }: { status: APIKey["status"] }) {
-  const active = status !== "inactive";
-  return (
-    <span
-      className={
-        active
-          ? "inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-400"
-          : "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] font-medium text-zinc-400"
-      }
-    >
-      <span
-        className={
-          active
-            ? "size-1.5 rounded-full bg-emerald-400"
-            : "size-1.5 rounded-full bg-zinc-500"
-        }
-      />
-      {active ? "Active" : "Inactive"}
-    </span>
   );
 }
 

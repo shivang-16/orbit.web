@@ -148,13 +148,15 @@ function ModelDetail({ model }: { model: CatalogueModelDetail }) {
       <section className="mt-8">
         <h2 className="text-[13px] font-medium text-white">Providers</h2>
         <div className="mt-3 overflow-x-auto rounded-xl border border-white/10 bg-[#0b0b0c]">
-          <table className="w-full min-w-[560px] text-left text-[13px]">
+          <table className="w-full min-w-[640px] text-left text-[13px]">
             <thead>
               <tr className="border-b border-white/10 text-xs text-zinc-400">
                 <th className="px-4 py-2.5 font-normal">Provider</th>
-                <th className="px-4 py-2.5 font-normal">Model ID</th>
                 <th className="px-4 py-2.5 text-right font-normal">Context</th>
                 <th className="px-4 py-2.5 text-right font-normal">Modalities</th>
+                <th className="px-4 py-2.5 text-right font-normal">Input / 1M tokens</th>
+                <th className="px-4 py-2.5 text-right font-normal">Output / 1M tokens</th>
+                <th className="px-4 py-2.5 text-right font-normal">Currency</th>
               </tr>
             </thead>
             <tbody>
@@ -165,60 +167,25 @@ function ModelDetail({ model }: { model: CatalogueModelDetail }) {
                     {providerLabel(model.provider)}
                   </span>
                 </td>
-                <td className="max-w-[260px] truncate px-4 py-3 font-mono text-xs text-zinc-400">
-                  {model.model_id}
-                </td>
                 <td className="px-4 py-3 text-right tabular-nums text-zinc-300">
                   {formatContext(model.input_context_limit)}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <ModalityBadgeList modalities={model.modalities} className="justify-end" />
                 </td>
+                <td className="px-4 py-3 text-right tabular-nums text-zinc-300">
+                  {model.pricing ? formatPerMillion(model.pricing.vendor_input_per_million_micros) : "—"}
+                </td>
+                <td className="px-4 py-3 text-right tabular-nums text-zinc-300">
+                  {model.pricing ? formatPerMillion(model.pricing.vendor_output_per_million_micros) : "—"}
+                </td>
+                <td className="px-4 py-3 text-right uppercase text-zinc-400">
+                  {model.pricing?.currency || "USD"}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </section>
-
-      <section className="mt-6">
-        <h2 className="text-[13px] font-medium text-white">Pricing</h2>
-        {model.pricing ? (
-          <div className="mt-3 overflow-x-auto rounded-xl border border-white/10 bg-[#0b0b0c]">
-            <table className="w-full min-w-[560px] text-left text-[13px]">
-              <thead>
-                <tr className="border-b border-white/10 text-xs text-zinc-400">
-                  <th className="px-4 py-2.5 font-normal">Provider</th>
-                  <th className="px-4 py-2.5 text-right font-normal">Input / 1M tokens</th>
-                  <th className="px-4 py-2.5 text-right font-normal">Output / 1M tokens</th>
-                  <th className="px-4 py-2.5 text-right font-normal">Currency</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="px-4 py-3">
-                    <span className="flex items-center gap-2 text-white">
-                      <ProviderLogo provider={model.provider} />
-                      {providerLabel(model.provider)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums text-zinc-300">
-                    {formatPerMillion(model.pricing.vendor_input_per_million_micros)}
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums text-zinc-300">
-                    {formatPerMillion(model.pricing.vendor_output_per_million_micros)}
-                  </td>
-                  <td className="px-4 py-3 text-right uppercase text-zinc-400">
-                    {model.pricing.currency || "USD"}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="mt-3 rounded-xl border border-white/10 bg-[#0b0b0c] px-4 py-8 text-center text-[13px] text-zinc-400">
-            No pricing for this model yet.
-          </div>
-        )}
       </section>
     </div>
   );
