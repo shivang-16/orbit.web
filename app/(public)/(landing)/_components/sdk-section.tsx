@@ -5,6 +5,10 @@ import Link from "next/link";
 import { ArrowRight, Check, Copy } from "lucide-react";
 
 import { VendorLogo } from "@/components/models/vendor-logo";
+import {
+  USE_CASES_SECTION_ID,
+  scrollToLandingSection,
+} from "@/components/layout/claude-code-nav";
 import { anthropicBaseUrl, openaiBaseUrl } from "@/lib/inference-docs";
 import { cn } from "@/lib/utils";
 
@@ -142,6 +146,14 @@ export function SdkSection() {
   const [copied, setCopied] = useState(false);
   const typedModel = useTypewriter(MODELS);
 
+  useEffect(() => {
+    if (window.location.hash !== `#${USE_CASES_SECTION_ID}`) return;
+    const frame = requestAnimationFrame(() =>
+      scrollToLandingSection(USE_CASES_SECTION_ID)
+    );
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   const template = useMemo(() => samples(sdk)[language], [sdk, language]);
   const [before, after] = template.split(MODEL_TOKEN);
 
@@ -154,7 +166,10 @@ export function SdkSection() {
   }
 
   return (
-    <section className="relative bg-black px-4 py-16 sm:px-6 sm:py-24 lg:px-10 lg:py-28 xl:px-12">
+    <section
+      id={USE_CASES_SECTION_ID}
+      className="relative scroll-mt-16 bg-black px-4 py-16 sm:px-6 sm:py-24 lg:px-10 lg:py-28 xl:px-12"
+    >
       <div className="mx-auto grid max-w-6xl items-center gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] lg:gap-20">
         <div>
           <h2 className="max-w-md text-[clamp(1.75rem,6vw,2.5rem)] leading-[1.1] font-normal tracking-[-0.035em] lg:text-[clamp(1.75rem,3vw,2.5rem)]">

@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
+import { LandingSectionLink } from "@/components/layout/claude-code-nav";
+
 type NavItem = {
   label: string;
   href: string;
+  sectionId?: string;
 };
 
 type Props = {
@@ -31,6 +34,9 @@ export function MobileNav({ items }: Props) {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const itemClassName =
+    "border-b border-white/6 py-3.5 text-[15px] text-zinc-300 transition-colors last:border-b-0 hover:text-white";
 
   return (
     <div className="lg:hidden">
@@ -57,16 +63,27 @@ export function MobileNav({ items }: Props) {
             id="landing-mobile-nav"
             className="fixed inset-x-0 top-14 z-50 flex flex-col border-b border-white/8 bg-black/95 px-4 py-3 backdrop-blur-md sm:top-16 sm:px-6"
           >
-            {items.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-white/6 py-3.5 text-[15px] text-zinc-300 transition-colors last:border-b-0 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {items.map((item) =>
+              item.sectionId ? (
+                <LandingSectionLink
+                  key={item.label}
+                  id={item.sectionId}
+                  onNavigate={() => setOpen(false)}
+                  className={itemClassName}
+                >
+                  {item.label}
+                </LandingSectionLink>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={itemClassName}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
         </>
       ) : null}

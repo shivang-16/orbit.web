@@ -1,3 +1,4 @@
+import { ClaudeCodeSection } from "./_components/claude-code-section";
 import { FaqSection } from "./_components/faq-section";
 import { Hero } from "./_components/hero";
 import { RouterSection } from "./_components/router-section";
@@ -9,6 +10,7 @@ export default function LandingPage() {
       <Hero />
       <SdkSection />
       <RouterSection />
+      <ClaudeCodeSection />
       <FaqSection />
     </main>
   );
