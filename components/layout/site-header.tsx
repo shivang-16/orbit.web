@@ -45,7 +45,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5 sm:gap-2">
           <a
-            href="https://discord.gg/tryorbit"
+            href="https://discord.gg/JHsxTjPUBc"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Join Orbit on Discord"

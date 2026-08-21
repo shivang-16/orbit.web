@@ -10,6 +10,7 @@ const LINKS = {
   ],
   Resources: [
     { label: "Docs", href: "/docs" },
+    { label: "Discord", href: "https://discord.gg/JHsxTjPUBc" },
     { label: "Sign in", href: "/sign-in" },
     { label: "Sign up", href: "/sign-up" },
   ],
@@ -55,12 +56,24 @@ export function Footer() {
                 <ul className="flex flex-col gap-2.5">
                   {items.map((item) => (
                     <li key={`${group}-${item.label}`}>
-                      <Link
-                        href={item.href}
-                        className="text-[13px] text-zinc-400 transition-colors hover:text-white"
-                      >
-                        {item.label}
-                      </Link>
+                      {item.href.startsWith("http") || item.href.startsWith("mailto:") ? (
+                        <a
+                          href={item.href}
+                          {...(item.href.startsWith("http")
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                          className="text-[13px] text-zinc-400 transition-colors hover:text-white"
+                        >
+                          {item.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="text-[13px] text-zinc-400 transition-colors hover:text-white"
+                        >
+                          {item.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
