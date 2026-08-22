@@ -63,14 +63,27 @@ async function handleRequest(req: NextRequest, context: RouteContext) {
     );
   }
 
-  const responseBody = await backendRes.text();
   const responseHeaders = new Headers();
-  const contentType = backendRes.headers.get("content-type");
+  const contentType = backendRes.headers.get("content-type") ?? "";
   if (contentType) {
     responseHeaders.set("content-type", contentType);
   }
+  const disposition = backendRes.headers.get("content-disposition");
+  if (disposition) {
+    responseHeaders.set("content-disposition", disposition);
+  }
 
-  return new NextResponse(responseBody, {
+  const isBinary =
+    contentType.includes("application/pdf") || contentType.includes("octet-stream");
+  if (isBinary) {
+    const buffer = await backendRes.arrayBuffer();
+    return new NextResponse(buffer, {
+      status: backendRes.status,
+      headers: responseHeaders,
+    });
+  }
+
+  return new NextResponse(await backendRes.text(), {
     status: backendRes.status,
     headers: responseHeaders,
   });
