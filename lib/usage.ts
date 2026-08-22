@@ -1,6 +1,12 @@
 import { apiFetch } from "@/lib/api";
 
+export type UsageView = "tokens" | "cost";
 export type UsageRangePreset = "1d" | "7d" | "30d" | "mtd" | "last_month";
+
+export const USAGE_VIEW_OPTIONS: { value: UsageView; label: string }[] = [
+  { value: "tokens", label: "Token usage" },
+  { value: "cost", label: "Cost usage" },
+];
 
 export const USAGE_RANGE_PRESETS: { id: UsageRangePreset; label: string }[] = [
   { id: "1d", label: "1d" },
@@ -16,6 +22,7 @@ export type UsageModelPoint = {
   input_tokens: number;
   output_tokens: number;
   total_tokens: number;
+  cost_micros: number;
 };
 
 export type UsageDay = {
@@ -70,6 +77,14 @@ export function formatTokenCount(value: number) {
     return `${trimZeros(value / 1_000)}k`;
   }
   return value.toLocaleString("en-US");
+}
+
+export function formatCompactDollars(micros: number) {
+  const dollars = Math.abs(micros) / 1_000_000;
+  if (dollars >= 1_000) return `$${trimZeros(dollars / 1_000)}k`;
+  if (dollars >= 1) return `$${dollars.toFixed(2)}`;
+  if (dollars > 0) return `$${dollars.toFixed(3)}`;
+  return "$0";
 }
 
 function trimZeros(value: number) {

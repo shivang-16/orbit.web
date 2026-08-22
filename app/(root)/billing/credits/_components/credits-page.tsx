@@ -53,7 +53,7 @@ export function CreditsPage() {
       ) : (
         <>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <SummaryCard label="Total credits given" value={formatExactCreditDollars(credits.credits_granted_micros)} />
+            <SummaryCard label="Total granted" value={formatExactCreditDollars(credits.credits_granted_micros)} />
             <SummaryCard label="Total used" value={formatExactCreditDollars(credits.credits_used_micros)} />
             <SummaryCard label="Left credits" value={formatExactCreditDollars(credits.credits_remaining_micros)} />
           </div>

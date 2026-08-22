@@ -15,8 +15,10 @@ import { cn } from "@/lib/utils";
 import {
   USAGE_CHART_COLORS,
   formatChartTick,
+  formatCompactDollars,
   formatTokenCount,
   type UsageDay,
+  type UsageView,
 } from "@/lib/usage";
 
 type ChartRow = {
@@ -27,17 +29,22 @@ type ChartRow = {
   [model: string]: string | number | Record<string, number>;
 };
 
-export function UsageChart({ series }: { series: UsageDay[] }) {
-  const { rows, models } = useMemo(() => buildChart(series), [series]);
+export function UsageChart({ series, metric }: { series: UsageDay[]; metric: UsageView }) {
+  const { rows, models } = useMemo(() => buildChart(series, metric), [series, metric]);
   const [groupBy] = useState("Model");
+  const isCost = metric === "cost";
 
   return (
     <section className="mt-6 rounded-xl border border-white/10 bg-[#0b0b0c]">
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 px-4 py-4">
         <div>
-          <h2 className="text-[15px] font-medium text-white">Your usage</h2>
+          <h2 className="text-[15px] font-medium text-white">
+            {isCost ? "Your cost" : "Your usage"}
+          </h2>
           <p className="mt-0.5 text-[13px] text-zinc-400">
-            Your usage per day across this period
+            {isCost
+              ? "Your cost per day across this period"
+              : "Your usage per day across this period"}
           </p>
         </div>
         <div className="rounded-lg border border-white/10 bg-black px-3 py-1.5 text-[12px] text-zinc-300">
@@ -48,7 +55,7 @@ export function UsageChart({ series }: { series: UsageDay[] }) {
       <div className="px-2 py-4 sm:px-4">
         {models.length === 0 ? (
           <p className="px-2 py-16 text-center text-[13px] text-zinc-500">
-            No inference usage in this range.
+            {isCost ? "No cost in this range." : "No inference usage in this range."}
           </p>
         ) : (
           <div className="h-[220px] w-full sm:h-[340px]">
@@ -63,7 +70,7 @@ export function UsageChart({ series }: { series: UsageDay[] }) {
                   tickLine={false}
                 />
                 <YAxis
-                  tickFormatter={formatTokenCount}
+                  tickFormatter={isCost ? formatCompactDollars : formatTokenCount}
                   tick={{ fill: "#a1a1aa", fontSize: 12 }}
                   axisLine={false}
                   tickLine={false}
@@ -79,6 +86,7 @@ export function UsageChart({ series }: { series: UsageDay[] }) {
                         dateKey={String(label)}
                         models={models}
                         row={row}
+                        metric={metric}
                       />
                     );
                   }}
@@ -118,19 +126,25 @@ export function UsageChart({ series }: { series: UsageDay[] }) {
   );
 }
 
+function formatValue(value: number, metric: UsageView) {
+  return metric === "cost" ? formatCompactDollars(value) : formatTokenCount(value);
+}
+
 function UsageTooltip({
   dateKey,
   models,
   row,
+  metric,
 }: {
   dateKey: string;
   models: string[];
   row: ChartRow;
+  metric: UsageView;
 }) {
   const dailyRows = models
-    .map((model) => ({ model, tokens: row.daily[model] ?? 0 }))
-    .filter((item) => item.tokens > 0)
-    .sort((a, b) => b.tokens - a.tokens);
+    .map((model) => ({ model, value: row.daily[model] ?? 0 }))
+    .filter((item) => item.value > 0)
+    .sort((a, b) => b.value - a.value);
 
   return (
     <div className="min-w-[220px] rounded-lg border border-white/10 bg-[#111] px-3 py-2.5 shadow-xl">
@@ -141,9 +155,9 @@ function UsageTooltip({
           <div key={item.model} className="flex items-center justify-between gap-4 text-[12px]">
             <span className="max-w-[140px] truncate text-zinc-300">{item.model}</span>
             <span className="tabular-nums text-zinc-200">
-              {formatTokenCount(item.tokens)}
+              {formatValue(item.value, metric)}
               <span className="ml-1 text-zinc-500">
-                ({row.dailyTotal > 0 ? ((item.tokens / row.dailyTotal) * 100).toFixed(1) : "0.0"}%)
+                ({row.dailyTotal > 0 ? ((item.value / row.dailyTotal) * 100).toFixed(1) : "0.0"}%)
               </span>
             </span>
           </div>
@@ -152,18 +166,22 @@ function UsageTooltip({
       <div className="mt-2 border-t border-white/10 pt-2 text-[12px]">
         <div className={cn("flex justify-between text-zinc-300")}>
           <span>Daily total</span>
-          <span className="tabular-nums">{formatTokenCount(row.dailyTotal)}</span>
+          <span className="tabular-nums">{formatValue(row.dailyTotal, metric)}</span>
         </div>
         <div className="mt-1 flex justify-between text-zinc-300">
           <span>Cumulative</span>
-          <span className="tabular-nums">{formatTokenCount(row.cumulativeTotal)}</span>
+          <span className="tabular-nums">{formatValue(row.cumulativeTotal, metric)}</span>
         </div>
       </div>
     </div>
   );
 }
 
-function buildChart(series: UsageDay[]) {
+function pointValue(point: UsageDay["models"][number], metric: UsageView) {
+  return metric === "cost" ? point.cost_micros ?? 0 : point.total_tokens;
+}
+
+function buildChart(series: UsageDay[], metric: UsageView) {
   const models = Array.from(
     new Set(series.flatMap((day) => day.models.map((model) => model.model_name)))
   );
@@ -174,9 +192,10 @@ function buildChart(series: UsageDay[]) {
     const daily: Record<string, number> = {};
     let dailyTotal = 0;
     for (const point of day.models) {
-      daily[point.model_name] = (daily[point.model_name] ?? 0) + point.total_tokens;
-      dailyTotal += point.total_tokens;
-      running[point.model_name] = (running[point.model_name] ?? 0) + point.total_tokens;
+      const value = pointValue(point, metric);
+      daily[point.model_name] = (daily[point.model_name] ?? 0) + value;
+      dailyTotal += value;
+      running[point.model_name] = (running[point.model_name] ?? 0) + value;
     }
     const row: ChartRow = {
       date: day.date,
