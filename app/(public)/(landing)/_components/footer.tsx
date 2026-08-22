@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ASK_AI_QUERY } from "@/lib/ask-ai";
+import { ORBIT_DOCS } from "@/lib/docs";
 
 const LINKS = {
   Product: [
@@ -9,7 +10,7 @@ const LINKS = {
     { label: "Pricing", href: "/pricing" },
   ],
   Resources: [
-    { label: "Docs", href: "/docs" },
+    { label: "Docs", href: ORBIT_DOCS.home },
     { label: "Discord", href: "https://discord.gg/JHsxTjPUBc" },
     { label: "Sign in", href: "/sign-in" },
     { label: "Sign up", href: "/sign-up" },

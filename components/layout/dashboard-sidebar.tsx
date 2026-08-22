@@ -17,6 +17,7 @@ import { usePathname } from "next/navigation";
 import type { Icon } from "@phosphor-icons/react";
 
 import { OrgSwitcher } from "@/components/layout/org-switcher";
+import { ORBIT_DOCS } from "@/lib/docs";
 import { cn } from "@/lib/utils";
 
 type NavLeaf = { label: string; href: string; icon: Icon };
@@ -33,7 +34,7 @@ const NAV_ITEMS: Array<NavLeaf | NavGroup> = [
   // { label: "SDK Test", href: "/sdk-test", icon: FlaskIcon },
   { label: "Usage", href: "/usage", icon: ChartLineIcon },
   { label: "API Keys", href: "/api-keys", icon: KeyIcon },
-  { label: "Documentation", href: "/docs", icon: BookOpenTextIcon },
+  { label: "Documentation", href: ORBIT_DOCS.home, icon: BookOpenTextIcon },
   {
     label: "Billing",
     icon: CreditCardIcon,
@@ -88,14 +89,17 @@ export function DashboardSidebar() {
 }
 
 function LeafLink({ item, pathname }: { item: NavLeaf; pathname: string }) {
+  const external = item.href.startsWith("http");
   const active =
-    item.href === "/dashboard"
+    !external &&
+    (item.href === "/dashboard"
       ? pathname === "/dashboard"
-      : pathname === item.href || pathname.startsWith(`${item.href}/`);
+      : pathname === item.href || pathname.startsWith(`${item.href}/`));
   const ItemIcon = item.icon;
   return (
     <Link
       href={item.href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={cn(
         "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition-colors",
         active

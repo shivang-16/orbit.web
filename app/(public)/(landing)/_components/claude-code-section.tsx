@@ -6,6 +6,7 @@ import { ArrowUpRight, Check, Copy } from "lucide-react";
 
 import { CLAUDE_CODE_SECTION_ID, scrollToClaudeCode } from "@/components/layout/claude-code-nav";
 import { Button } from "@/components/ui/button";
+import { ORBIT_DOCS } from "@/lib/docs";
 import { anthropicBaseUrl } from "@/lib/inference-docs";
 
 const HIGHLIGHTS = [
@@ -136,7 +137,7 @@ export function ClaudeCodeSection() {
             asChild
             className="group h-11 w-auto shrink-0 gap-2 rounded-lg bg-white pr-1 pl-4 text-[13px] font-medium text-black hover:bg-zinc-200 sm:h-12 sm:gap-3 sm:pr-1.5 sm:pl-5 sm:text-sm"
           >
-            <Link href="/docs">
+            <Link href={ORBIT_DOCS.claudeCode}>
               Set up Claude Code
               <span className="flex size-8 items-center justify-center rounded-md bg-black text-white sm:size-9">
                 <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />

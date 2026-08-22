@@ -78,6 +78,9 @@ export function MobileNav({ items }: Props) {
                   key={item.label}
                   href={item.href}
                   onClick={() => setOpen(false)}
+                  {...(item.href.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                   className={itemClassName}
                 >
                   {item.label}

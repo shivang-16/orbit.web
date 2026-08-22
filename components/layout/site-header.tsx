@@ -3,12 +3,13 @@ import Link from "next/link";
 import { AuthControls } from "@/components/layout/auth-controls";
 import { ClaudeCodeNavButton, LandingSectionLink } from "@/components/layout/claude-code-nav";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { ORBIT_DOCS } from "@/lib/docs";
 
 const NAV_ITEMS = [
   { label: "Models", href: "/models" },
   { label: "Use cases", href: "/#use-cases", sectionId: "use-cases" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Docs", href: "/docs" },
+  { label: "Docs", href: ORBIT_DOCS.home },
 ];
 
 const navClassName =
@@ -36,7 +37,14 @@ export function SiteHeader() {
                 {item.label}
               </LandingSectionLink>
             ) : (
-              <Link key={item.label} href={item.href} className={navClassName}>
+              <Link
+                key={item.label}
+                href={item.href}
+                {...(item.href.startsWith("http")
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                className={navClassName}
+              >
                 {item.label}
               </Link>
             )
