@@ -14,6 +14,7 @@ export function ApiKeysPage() {
   const [keys, setKeys] = useState<APIKey[] | null>(null);
   const [canDelete, setCanDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   const load = useCallback(() => {
@@ -51,7 +52,11 @@ export function ApiKeysPage() {
 
       {error ? (
         <p className="mt-6 text-[13px] text-red-400">{error}</p>
-      ) : keys === null ? (
+      ) : null}
+      {success ? (
+        <p className="mt-6 text-[13px] text-emerald-400">{success}</p>
+      ) : null}
+      {error ? null : keys === null ? (
         <Loader />
       ) : (
         <div className="mt-6">
@@ -63,6 +68,8 @@ export function ApiKeysPage() {
             onDelete={async (id) => {
               await deleteAPIKey(id);
               setKeys((current) => current?.filter((key) => key.id !== id) ?? null);
+              setError(null);
+              setSuccess("Key removed successfully.");
             }}
           />
         </div>

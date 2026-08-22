@@ -73,6 +73,13 @@ async function handleRequest(req: NextRequest, context: RouteContext) {
     responseHeaders.set("content-disposition", disposition);
   }
 
+  if (backendRes.status === 204 || backendRes.status === 205) {
+    return new NextResponse(null, {
+      status: backendRes.status,
+      headers: responseHeaders,
+    });
+  }
+
   const isBinary =
     contentType.includes("application/pdf") || contentType.includes("octet-stream");
   if (isBinary) {
